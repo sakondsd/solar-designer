@@ -1,0 +1,484 @@
+:root {
+  /* Color Palette */
+  --almost-black: #252b48;
+  --dark-cyan: #2e8a99;
+  --bright-cyan: #84a7a1;
+  --sand: #dac0a3;
+  --off-white: #f7efe5;
+
+  /* General Styling Colors */
+  --background-color: var(--off-white);
+  --text-color: #333;
+  --header-footer-bg: var(--almost-black);
+  --header-footer-text: var(--off-white);
+  --heading-color: var(--dark-cyan);
+  --card-background: white;
+  --section-background: #fdfbf8;
+  --border-color: #e0d9d1;
+
+  /* Buttons & Accents */
+  --accent-color: var(--dark-cyan);
+  --button-hover-color: var(--bright-cyan);
+  --highlight-color: var(--dark-cyan);
+}
+
+body {
+  font-family: "Sarabun", Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  line-height: 1.6;
+}
+
+header {
+  background-color: var(--header-footer-bg);
+  color: var(--header-footer-text);
+  padding: 1.2em 0;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+main {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 30px auto;
+  background-color: var(--card-background);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.08);
+  border-radius: 10px;
+}
+
+h1,
+h2,
+h3 {
+  color: var(--heading-color);
+}
+
+#system-selection {
+  text-align: center;
+}
+
+.system-options {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 30px;
+  flex-wrap: wrap;
+}
+
+.system-card {
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 20px;
+  width: 300px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  cursor: pointer;
+  background-color: var(--section-background);
+}
+
+.system-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+.system-card img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  background-color: white;
+  padding: 5px;
+  border: 1px solid var(--border-color);
+}
+
+.system-card button {
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background-color 0.2s;
+  font-weight: bold;
+}
+
+.system-card button:hover {
+  background-color: var(--button-hover-color);
+  color: var(--almost-black);
+}
+
+#design-area {
+  margin-top: 30px;
+}
+
+#design-area #back-to-selection {
+  background-color: var(--sand);
+  color: var(--almost-black);
+  border: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+#design-area #back-to-selection:hover {
+  background-color: #c9a278;
+}
+
+.design-content {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.load-input-section,
+.result-section {
+  flex: 1;
+  min-width: 400px;
+  background-color: var(--section-background);
+  padding: 25px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+.load-form label,
+#common-params label,
+#additional-params-off-grid label,
+#grid-tie-inputs label {
+  display: block;
+  margin-bottom: 5px;
+  margin-top: 15px;
+  font-weight: bold;
+  color: var(--almost-black);
+}
+
+.load-form input,
+.load-form select,
+#additional-params-off-grid input,
+#additional-params-off-grid select,
+#common-params input,
+#common-params select,
+#grid-tie-inputs input,
+#grid-tie-inputs select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+  box-sizing: border-box;
+}
+
+.param-description {
+  font-size: 0.85em;
+  color: #555;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  padding-left: 2px;
+}
+
+.load-form button,
+#calculate-btn {
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  padding: 12px 22px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1.05em;
+  font-weight: bold;
+  transition: background-color 0.2s;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.load-form button:hover,
+#calculate-btn:hover {
+  background-color: var(--button-hover-color);
+  color: var(--almost-black);
+}
+
+#ac-unit-selection {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: normal;
+}
+
+#load-summary-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+#load-summary-table th,
+#load-summary-table td {
+  border: 1px solid var(--border-color);
+  padding: 10px;
+  text-align: left;
+}
+
+#load-summary-table th {
+  background-color: #e9e4de;
+  color: var(--almost-black);
+  font-weight: bold;
+}
+
+#load-summary-table td button {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+#load-summary-table td button:hover {
+  background-color: #c82333;
+}
+
+#total-daily-energy,
+#max-instantaneous-load {
+  font-weight: bold;
+  font-size: 1.1em;
+  color: var(--highlight-color);
+}
+
+.results-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  margin-top: 15px;
+}
+
+.results-wrapper > #calculation-details,
+.results-wrapper > .system-diagram-container {
+  flex: 1;
+  min-width: 350px;
+}
+
+.result-section h4 {
+  color: var(--almost-black);
+  border-bottom: 2px solid var(--sand);
+  padding-bottom: 5px;
+  margin-bottom: 15px;
+}
+
+#calculation-details h5 {
+  font-size: 1.1em;
+  color: var(--dark-cyan);
+  margin-top: 20px;
+  margin-bottom: 10px;
+  padding-bottom: 3px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+#calculation-details div {
+  margin-bottom: 10px;
+  padding: 12px;
+  background-color: #e9e4de;
+  border-left: 4px solid var(--sand);
+  border-radius: 5px;
+  font-size: 0.95em;
+}
+
+#calculation-details div strong {
+  color: var(--almost-black);
+  font-size: 1.05em;
+}
+
+.savings-summary {
+  background-color: var(--dark-cyan) !important;
+  color: white;
+  border-left: 4px solid var(--almost-black) !important;
+}
+.savings-summary strong,
+.savings-summary .formula,
+.savings-summary .calculation {
+  color: white !important;
+}
+
+.calculation {
+  color: #556b2f;
+  font-style: italic;
+}
+
+.system-diagram-container {
+  position: relative;
+  text-align: center;
+}
+
+#system-diagram {
+  max-width: 100%;
+  height: auto;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: white;
+}
+
+#diagram-overlay {
+  position: relative;
+  display: inline-block;
+}
+
+.overlay-text {
+  position: absolute;
+  background-color: rgba(247, 239, 229, 0.9);
+  border: 2px solid var(--bright-cyan);
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 0.8em; /* Reduced base font size for Off-Grid */
+  font-weight: bold;
+  color: var(--almost-black);
+  white-space: pre;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transform: translateX(-50%);
+}
+
+/* --- Positions for Off-Grid Diagram --- */
+.overlay-text.solar-panels {
+  top: 15%;
+  left: 26.3%;
+}
+.overlay-text.charge-controller {
+  top: 32%;
+  left: 35%;
+}
+.overlay-text.battery {
+  top: 82%;
+  left: 46%;
+}
+.overlay-text.inverter {
+  top: 73%;
+  left: 74%;
+}
+.overlay-text.ac-load {
+  top: 64%;
+  left: 85%;
+}
+.overlay-text.dc-load {
+  top: 80%;
+  left: 23%;
+}
+.overlay-text.og-pv-fuse {
+  top: 68%;
+  left: 8%;
+}
+.overlay-text.og-dc-surge {
+  top: 32%;
+  left: 15%;
+}
+.overlay-text.og-pv-breaker {
+  top: 32%;
+  left: 25%;
+}
+.overlay-text.og-ctrl-batt-breaker {
+  top: 32%;
+  left: 46%;
+}
+.overlay-text.og-batt-inv-breaker {
+  top: 32%;
+  left: 55%;
+}
+.overlay-text.og-ac-surge {
+  top: 10%;
+  left: 75%;
+}
+.overlay-text.og-ac-breaker {
+  top: 10%;
+  left: 86%;
+}
+.overlay-text.og-ac-fuse {
+  /* Added new position for AC Fuse */
+  top: 10%;
+  left: 65%;
+}
+
+/* --- Positions for Grid-Tie Diagram --- */
+.overlay-text.gridtie-inverter {
+  top: 81%;
+  left: 47%;
+}
+.overlay-text.gt-pv-fuse {
+  top: 77%;
+  left: 8%;
+}
+.overlay-text.gt-dc-surge {
+  top: 80%;
+  left: 25%;
+}
+.overlay-text.gt-dc-breaker {
+  top: 36%;
+  left: 28%;
+}
+
+footer {
+  text-align: center;
+  padding: 20px;
+  margin-top: 30px;
+  background-color: var(--header-footer-bg);
+  color: var(--header-footer-text);
+  font-size: 0.9em;
+}
+
+@media (max-width: 900px) {
+  .design-content {
+    flex-direction: column;
+  }
+  .load-input-section,
+  .result-section {
+    min-width: unset;
+    width: auto;
+  }
+}
+
+@media (max-width: 600px) {
+  .system-options {
+    flex-direction: column;
+    align-items: center;
+  }
+  .system-card {
+    width: 90%;
+  }
+  main {
+    margin: 15px;
+    padding: 15px;
+  }
+}
+
+/* --- ปรับขนาดตัวอักษรสำหรับ Off-Grid Diagram โดยเฉพาะ --- */
+.overlay-text.solar-panels,
+.overlay-text.charge-controller,
+.overlay-text.battery,
+.overlay-text.inverter,
+.overlay-text.ac-load,
+.overlay-text.dc-load,
+.overlay-text.og-pv-fuse,
+.overlay-text.og-dc-surge,
+.overlay-text.og-pv-breaker,
+.overlay-text.og-ctrl-batt-breaker,
+.overlay-text.og-batt-inv-breaker,
+.overlay-text.og-ac-surge,
+.overlay-text.og-ac-breaker,
+.overlay-text.og-ac-fuse,
+.overlay-text.gridtie-inverter,
+.overlay-text.gt-pv-fuse,
+.overlay-text.gt-dc-surge,
+.overlay-text.gt-dc-breaker {
+  font-size: 0.6em; /* ลองปรับค่าตรงนี้ (เช่น 0.7em, 0.9em) เพื่อหาขนาดที่ต้องการ */
+}
