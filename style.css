@@ -482,3 +482,76 @@ footer {
 .overlay-text.gt-dc-breaker {
   font-size: 0.6em; /* ลองปรับค่าตรงนี้ (เช่น 0.7em, 0.9em) เพื่อหาขนาดที่ต้องการ */
 }
+
+/* --- START: CSS for Mobile Responsive Overlays --- */
+@media (max-width: 600px) {
+  .overlay-text {
+    /* ลดขนาดตัวอักษรและระยะขอบสำหรับหน้าจอมือถือ */
+    font-size: 0.55em;
+    padding: 2px 4px;
+    border-width: 1px;
+    /* ซ่อนคำอธิบายยาวๆ บนมือถือเพื่อลดความแออัด */
+    white-space: normal; /* Allow wrapping */
+  }
+
+  /* ด้านล่างนี้คือการปรับตำแหน่งสำหรับมือถือโดยเฉพาะ 
+    คุณสามารถปรับแก้ค่า top/left เพิ่มเติมได้ตามต้องการ 
+  */
+
+  /* --- Positions for Off-Grid on Mobile --- */
+  .overlay-text.solar-panels {
+    top: 12%;
+    left: 30%;
+  }
+  .overlay-text.charge-controller {
+    top: 33%;
+    left: 35%;
+  }
+  .overlay-text.battery {
+    top: 82%;
+    left: 48%;
+  }
+  .overlay-text.inverter {
+    top: 73%;
+    left: 78%;
+  }
+  .overlay-text.og-pv-breaker {
+    top: 30%;
+    left: 22%;
+  }
+  .overlay-text.og-ctrl-batt-breaker {
+    top: 30%;
+    left: 48%;
+  }
+  .overlay-text.og-batt-inv-breaker {
+    top: 58%;
+    left: 63%;
+  }
+  .overlay-text.og-ac-breaker {
+    top: 58%;
+    left: 90%;
+  }
+  .overlay-text.og-ac-fuse {
+    top: 58%;
+    left: 70%;
+  }
+
+  /* --- Positions for Grid-Tie on Mobile --- */
+  .overlay-text.gridtie-inverter {
+    top: 82%;
+    left: 47%;
+  }
+  .overlay-text.gt-dc-breaker {
+    top: 40%;
+    left: 28%;
+  }
+  .overlay-text.gt-dc-surge {
+    top: 60%;
+    left: 18%;
+  }
+  .overlay-text.gt-pv-fuse {
+    top: 77%;
+    left: 12%;
+  }
+}
+/* --- END: CSS for Mobile Responsive Overlays --- */
