@@ -461,7 +461,7 @@ footer {
   }
 }
 
-/* --- ปรับขนาดตัวอักษรสำหรับ Off-Grid Diagram โดยเฉพาะ --- */
+/* --- ปรับขนาดตัวอักษรสำหรับหน้าจอปกติ (Desktop) --- */
 .overlay-text.solar-panels,
 .overlay-text.charge-controller,
 .overlay-text.battery,
@@ -480,31 +480,21 @@ footer {
 .overlay-text.gt-pv-fuse,
 .overlay-text.gt-dc-surge,
 .overlay-text.gt-dc-breaker {
-  font-size: 0.6em; /* ลองปรับค่าตรงนี้ (เช่น 0.7em, 0.9em) เพื่อหาขนาดที่ต้องการ */
+  font-size: 0.6em; /* ขนาดตัวอักษรบนจอคอมพิวเตอร์ */
 }
 
-/* --- START: CSS for Mobile Responsive Overlays --- */
+/* --- START: ส่วนที่เพิ่มเข้ามาสำหรับปรับการแสดงผลบนมือถือ --- */
 @media (max-width: 600px) {
+  /* คำสั่งให้ข้อความทั้งหมดเล็กลงเมื่ออยู่บนมือถือ */
   .overlay-text {
-    /* ลดขนาดตัวอักษรและระยะขอบสำหรับหน้าจอมือถือ */
-    font-size: 0.55em;
-    padding: 2px 4px;
+    font-size: 0.5em; /* ทำให้ตัวอักษรเล็กลงอีกบนมือถือ */
+    padding: 2px 3px;
     border-width: 1px;
-    /* ซ่อนคำอธิบายยาวๆ บนมือถือเพื่อลดความแออัด */
-    white-space: normal; /* Allow wrapping */
   }
 
-  /* ด้านล่างนี้คือการปรับตำแหน่งสำหรับมือถือโดยเฉพาะ 
-    คุณสามารถปรับแก้ค่า top/left เพิ่มเติมได้ตามต้องการ 
-  */
-
-  /* --- Positions for Off-Grid on Mobile --- */
-  .overlay-text.solar-panels {
-    top: 12%;
-    left: 30%;
-  }
+  /* จัดตำแหน่งข้อความของ Off-Grid ใหม่สำหรับมือถือ */
   .overlay-text.charge-controller {
-    top: 33%;
+    top: 35%;
     left: 35%;
   }
   .overlay-text.battery {
@@ -515,28 +505,8 @@ footer {
     top: 73%;
     left: 78%;
   }
-  .overlay-text.og-pv-breaker {
-    top: 30%;
-    left: 22%;
-  }
-  .overlay-text.og-ctrl-batt-breaker {
-    top: 30%;
-    left: 48%;
-  }
-  .overlay-text.og-batt-inv-breaker {
-    top: 58%;
-    left: 63%;
-  }
-  .overlay-text.og-ac-breaker {
-    top: 58%;
-    left: 90%;
-  }
-  .overlay-text.og-ac-fuse {
-    top: 58%;
-    left: 70%;
-  }
 
-  /* --- Positions for Grid-Tie on Mobile --- */
+  /* จัดตำแหน่งข้อความของ Grid-Tie ใหม่สำหรับมือถือ */
   .overlay-text.gridtie-inverter {
     top: 82%;
     left: 47%;
@@ -554,4 +524,4 @@ footer {
     left: 12%;
   }
 }
-/* --- END: CSS for Mobile Responsive Overlays --- */
+/* --- END: ส่วนที่เพิ่มเข้ามา --- */
