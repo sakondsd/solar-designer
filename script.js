@@ -168,29 +168,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function calculateOffGrid() {
     clearCalculationDetails();
-
     const totalDailyLoadEnergyWh = updateOverallTotalEnergy();
     if (totalDailyLoadEnergyWh === 0) {
       alert("กรุณาเพิ่มโหลดการใช้งานก่อนคำนวณ");
       return;
     }
-
     const isc = parseFloat(panelIscInput.value);
     if (isNaN(isc) || isc <= 0) {
       alert("กรุณาเลือกขนาดแผงโซลาร์เซลล์ (เพื่อหาค่า Isc)");
       return;
     }
-
     const selectedOption = panelIscInput.options[panelIscInput.selectedIndex];
     const selectedPanelWattage = parseInt(selectedOption.text);
-
     const autonomyDays = parseFloat(autonomyDaysInput.value);
     const batteryVoltage = parseFloat(batteryVoltageSelect.value);
     const dod = parseFloat(dodInput.value) / 100;
     const inverterEfficiency = parseFloat(inverterEfficiencyInput.value) / 100;
     const systemLossFactor = parseFloat(systemLossFactorInput.value) / 100;
     const peakSunHours = parseFloat(peakSunHoursInput.value);
-
     addSubheading("1. ขนาดระบบหลัก (System Sizing)");
     const pvEnergyRequiredWh =
       totalDailyLoadEnergyWh / inverterEfficiency / systemLossFactor;
@@ -203,7 +198,6 @@ document.addEventListener("DOMContentLoaded", () => {
       pvEnergyRequiredWh.toFixed(2),
       "Wh/วัน"
     );
-
     const theoreticalWp = pvEnergyRequiredWh / peakSunHours;
     addCalculationStep(
       "1.2 ขนาดแผง (ตามทฤษฎี)",
@@ -211,7 +205,6 @@ document.addEventListener("DOMContentLoaded", () => {
       `${pvEnergyRequiredWh.toFixed(2)}Wh / ${peakSunHours}h`,
       `${theoreticalWp.toFixed(2)} Wp`
     );
-
     const theoreticalNumPanels = Math.ceil(
       theoreticalWp / selectedPanelWattage
     );
@@ -219,10 +212,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const controllerMaxVoltage = batteryVoltage >= 48 ? 150 : 100;
     const maxPanelsInSeries = Math.floor(controllerMaxVoltage / panelVoc);
     const numStrings = Math.ceil(theoreticalNumPanels / maxPanelsInSeries);
-
     const actualNumPanels = numStrings * maxPanelsInSeries;
     const actualWp = actualNumPanels * selectedPanelWattage;
-
     addCalculationStep(
       "1.3 การต่อแผง",
       `คำนวณจาก Wp ทฤษฎีและการจัดวาง`,
@@ -235,7 +226,6 @@ document.addEventListener("DOMContentLoaded", () => {
       `${actualNumPanels} × ${selectedPanelWattage}W`,
       `${actualWp.toFixed(0)} Wp`
     );
-
     let maxInstantaneousLoadW = 0;
     loads.forEach((load) => {
       maxInstantaneousLoadW += load.power * load.quantity;
@@ -248,7 +238,6 @@ document.addEventListener("DOMContentLoaded", () => {
       `${maxInstantaneousLoadW.toFixed(2)}W × 1.25`,
       `${inverterSizeW.toFixed(2)} W (แนะนำ ${recommendedInverterkW}kW)`
     );
-
     const energyFromBatteryWh =
       (totalDailyLoadEnergyWh * autonomyDays) / inverterEfficiency;
     const batteryCapacityAh = energyFromBatteryWh / (batteryVoltage * dod);
@@ -264,7 +253,6 @@ document.addEventListener("DOMContentLoaded", () => {
         2
       )} Ah (แนะนำ ${numBatteries} ลูก ${recommendedBatteryAh}Ah ${batteryVoltage}V)`
     );
-
     addSubheading("2. อุปกรณ์ป้องกันฝั่ง DC");
     const requiredFuseCurrent = isc * 1.56;
     const recommendedFuse = roundUpToStandard(
@@ -277,7 +265,6 @@ document.addEventListener("DOMContentLoaded", () => {
       `${isc.toFixed(2)}A × 1.56`,
       `แนะนำ ${recommendedFuse}A (ป้องกันกระแสเกินในสายแผง)`
     );
-
     const pvCableAmpacity = isc * 1.56;
     const recommendedPVCable = getPVCableSize(pvCableAmpacity);
     addCalculationStep(
@@ -286,14 +273,12 @@ document.addEventListener("DOMContentLoaded", () => {
       ``,
       `แนะนำ ${recommendedPVCable} (สายไฟทนแดดฝนสำหรับแผง)`
     );
-
     addCalculationStep(
       "2.3 DC Surge (PV)",
       "เลือกตามแรงดันระบบ",
       ``,
       `แนะนำ > ${controllerMaxVoltage}Vdc (ป้องกันฟ้าผ่า/ไฟกระชากฝั่งแผง)`
     );
-
     const maxPanelCurrentA = (actualWp / batteryVoltage) * 1.25;
     const recommendedPVBreaker = roundUpToStandard(
       maxPanelCurrentA,
@@ -307,7 +292,6 @@ document.addEventListener("DOMContentLoaded", () => {
         2
       )} A (แนะนำ ${recommendedPVBreaker}A - เบรกเกอร์หลักฝั่งแผง)`
     );
-
     const maxInverterCurrent =
       ((recommendedInverterkW * 1000) / batteryVoltage) * 1.25;
     const recommendedBatteryBreaker = roundUpToStandard(
@@ -322,7 +306,6 @@ document.addEventListener("DOMContentLoaded", () => {
         2
       )} A (แนะนำ ${recommendedBatteryBreaker}A - เบรกเกอร์หลักป้องกันแบตเตอรี่)`
     );
-
     addSubheading("3. อุปกรณ์ป้องกันฝั่ง AC");
     const maxACCurrent = ((recommendedInverterkW * 1000) / 230) * 1.25;
     const recommendedACBreaker = roundUpToStandard(
@@ -330,7 +313,6 @@ document.addEventListener("DOMContentLoaded", () => {
       [10, 16, 20, 25, 32]
     );
     const recommendedACFuse = recommendedACBreaker;
-
     addCalculationStep(
       "3.1 AC Fuse (Output)",
       `เลือกให้เท่ากับ AC Breaker`,
@@ -358,7 +340,6 @@ document.addEventListener("DOMContentLoaded", () => {
       ``,
       `แนะนำ ${recommendedACCable} (สายไฟสำหรับโหลด AC)`
     );
-
     addOverlayText(
       `${selectedPanelWattage}W x ${actualNumPanels} แผง\n(รวม ${actualWp.toFixed(
         0
@@ -390,11 +371,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function calculateGridTie() {
     clearCalculationDetails();
-
     const systemSizekW = parseFloat(gridTieSystemSizeSelect.value);
     const pricePerUnit = parseFloat(electricityPriceInput.value);
     const isc = parseFloat(panelIscInput.value);
-
     if (isNaN(isc) || isc <= 0) {
       alert("กรุณาเลือกขนาดแผงโซลาร์เซลล์ (เพื่อหาค่า Isc)");
       return;
@@ -403,13 +382,10 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("กรุณากรอกค่าไฟฟ้าต่อหน่วยให้ถูกต้อง");
       return;
     }
-
     const selectedOption = panelIscInput.options[panelIscInput.selectedIndex];
     const selectedPanelWattage = parseInt(selectedOption.text);
-
     const systemLossFactor = parseFloat(systemLossFactorInput.value) / 100;
     const peakSunHours = parseFloat(peakSunHoursInput.value);
-
     addSubheading("1. ผลการประหยัดพลังงาน");
     const energyPerDay = systemSizekW * peakSunHours * systemLossFactor;
     addCalculationStep(
@@ -419,7 +395,6 @@ document.addEventListener("DOMContentLoaded", () => {
       energyPerDay.toFixed(2),
       "kWh/วัน"
     );
-
     const energyPerMonth = energyPerDay * 30;
     const savingsPerMonth = energyPerMonth * pricePerUnit;
     addCalculationStep(
@@ -430,7 +405,6 @@ document.addEventListener("DOMContentLoaded", () => {
       "",
       true
     );
-
     const savingsPerYear = savingsPerMonth * 12;
     addCalculationStep(
       "1.3 ประหยัดค่าไฟต่อปี",
@@ -440,7 +414,6 @@ document.addEventListener("DOMContentLoaded", () => {
       "",
       true
     );
-
     addSubheading("2. อุปกรณ์สำหรับระบบขนาด " + systemSizekW + " kW");
     const recommendedInverterkW = systemSizekW;
     addCalculationStep(
@@ -449,24 +422,20 @@ document.addEventListener("DOMContentLoaded", () => {
       ``,
       `แนะนำ ${recommendedInverterkW}kW`
     );
-
     const actualNumPanels = Math.ceil(
       (recommendedInverterkW * 1000) / selectedPanelWattage
     );
     const actualWp = actualNumPanels * selectedPanelWattage;
-
     const panelVoc = 48;
     const inverterMaxVoltage = 550;
     const maxPanelsInSeries = Math.floor(inverterMaxVoltage / panelVoc);
     const numStrings = Math.ceil(actualNumPanels / maxPanelsInSeries);
-
     addCalculationStep(
       "2.2 ขนาดแผงโซลาร์",
       `(ขนาด Inverter / Wแผง)`,
       `(${recommendedInverterkW * 1000}W / ${selectedPanelWattage}W)`,
       `${actualWp.toFixed(0)} Wp (ใช้จริง ${actualNumPanels} แผง)`
     );
-
     let stringDescription = `ต่ออนุกรม ${actualNumPanels} แผง, จำนวน 1 สตริง`;
     if (numStrings > 1) {
       stringDescription = `ต่ออนุกรมสตริงละ ${maxPanelsInSeries} แผง, จำนวน ${numStrings} สตริง (อาจต้องปรับจำนวนแผงให้ลงตัว)`;
@@ -480,7 +449,6 @@ document.addEventListener("DOMContentLoaded", () => {
       ``,
       stringDescription
     );
-
     addSubheading("3. อุปกรณ์ป้องกันฝั่ง DC");
     const requiredFuseCurrent = isc * 1.56;
     const recommendedFuse = roundUpToStandard(
@@ -493,7 +461,6 @@ document.addEventListener("DOMContentLoaded", () => {
       `${isc.toFixed(2)}A × 1.56`,
       `แนะนำ ${recommendedFuse}A (ป้องกันกระแสเกินในสายแผง)`
     );
-
     const pvCableAmpacity = isc * 1.56;
     const recommendedPVCable = getPVCableSize(pvCableAmpacity);
     addCalculationStep(
@@ -502,14 +469,12 @@ document.addEventListener("DOMContentLoaded", () => {
       ``,
       `แนะนำ ${recommendedPVCable} (สายไฟทนแดดฝนสำหรับแผง)`
     );
-
     addCalculationStep(
       "3.3 DC Surge (PV)",
       "เลือกตามแรงดันระบบ",
       ``,
       `แนะนำ 1000Vdc (ป้องกันฟ้าผ่า/ไฟกระชากฝั่งแผง)`
     );
-
     const maxTotalCurrent = isc * numStrings * 1.25;
     const recommendedDCBreaker = roundUpToStandard(
       maxTotalCurrent,
@@ -521,7 +486,6 @@ document.addEventListener("DOMContentLoaded", () => {
       `(${isc.toFixed(2)}A × ${numStrings}) × 1.25`,
       `แนะนำ ${recommendedDCBreaker}A (เบรกเกอร์หลักฝั่งแผง)`
     );
-
     addSubheading("4. อุปกรณ์ป้องกันฝั่ง AC");
     const maxACCurrent = ((recommendedInverterkW * 1000) / 230) * 1.25;
     const recommendedACBreaker = roundUpToStandard(
@@ -534,7 +498,6 @@ document.addEventListener("DOMContentLoaded", () => {
       `(${recommendedInverterkW * 1000}W / 230V) × 1.25`,
       `แนะนำ ${recommendedACBreaker}A (เบรกเกอร์เชื่อมต่อระบบไฟ)`
     );
-
     const recommendedACCable = getACCableSize(recommendedACBreaker);
     addCalculationStep(
       "4.2 ขนาดสาย AC",
@@ -548,7 +511,6 @@ document.addEventListener("DOMContentLoaded", () => {
       ``,
       "แนะนำ 275Vac (ป้องกันไฟกระชากฝั่ง AC)"
     );
-
     addOverlayText(
       `${selectedPanelWattage}W x ${actualNumPanels} แผง\n(รวม ${actualWp.toFixed(
         0
@@ -566,11 +528,9 @@ document.addEventListener("DOMContentLoaded", () => {
     currentSystem = "off-grid";
     systemTitle.textContent = "ออกแบบ Off-Grid System";
     systemDiagram.src = "images/Off Grid.png";
-
     gridTieInputsDiv.style.display = "none";
     loadInputWrapperDiv.style.display = "block";
     additionalParamsOffGrid.style.display = "block";
-
     systemSelectionSection.style.display = "none";
     designAreaSection.style.display = "block";
     clearCalculationDetails();
@@ -584,11 +544,9 @@ document.addEventListener("DOMContentLoaded", () => {
     currentSystem = "grid-tie";
     systemTitle.textContent = "ออกแบบ Grid-Tie System";
     systemDiagram.src = "images/Grid Tie.png";
-
     gridTieInputsDiv.style.display = "block";
     loadInputWrapperDiv.style.display = "none";
     additionalParamsOffGrid.style.display = "none";
-
     systemSelectionSection.style.display = "none";
     designAreaSection.style.display = "block";
     clearCalculationDetails();
@@ -606,6 +564,14 @@ document.addEventListener("DOMContentLoaded", () => {
       deviceSelect.value === "เครื่องปรับอากาศ (Air Conditioner)"
         ? "flex"
         : "none";
+    // START: Logic for Water Heater time unit
+    const timeUnitDiv = document.getElementById("time-unit-selection");
+    if (timeUnitDiv) {
+      // Check if element exists before changing style
+      timeUnitDiv.style.display =
+        deviceSelect.value === "เครื่องทำน้ำอุ่น" ? "flex" : "none";
+    }
+    // END: Logic
   });
 
   addLoadBtn.addEventListener("click", () => {
@@ -652,6 +618,9 @@ document.addEventListener("DOMContentLoaded", () => {
       deviceSelect.value = "";
       deviceNameOtherInput.value = "";
       acUnitSelectionDiv.style.display = "none";
+      const timeUnitDiv = document.getElementById("time-unit-selection");
+      if (timeUnitDiv) timeUnitDiv.style.display = "none";
+
       devicePowerInput.value = "";
       deviceQuantityInput.value = "";
       deviceHoursSelect.value = "0";
