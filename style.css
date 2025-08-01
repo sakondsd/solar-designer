@@ -219,6 +219,21 @@ h3 {
   font-weight: normal;
 }
 
+.time-inputs {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.time-inputs select {
+  flex: 1;
+}
+
+.time-inputs span {
+  white-space: nowrap;
+}
+
 #load-summary-table {
   width: 100%;
   border-collapse: collapse;
@@ -341,7 +356,6 @@ h3 {
   border: 2px solid var(--bright-cyan);
   padding: 5px 10px;
   border-radius: 5px;
-  font-size: 0.8em; /* Reduced base font size for Off-Grid */
   font-weight: bold;
   color: var(--almost-black);
   white-space: pre;
@@ -404,7 +418,6 @@ h3 {
   left: 88%;
 }
 .overlay-text.og-ac-fuse {
-  /* Added new position for AC Fuse */
   top: 10%;
   left: 63%;
 }
@@ -461,38 +474,20 @@ footer {
   }
 }
 
-/* --- ปรับขนาดตัวอักษรสำหรับหน้าจอปกติ (Desktop) --- */
-.overlay-text.solar-panels,
-.overlay-text.charge-controller,
-.overlay-text.battery,
-.overlay-text.inverter,
-.overlay-text.ac-load,
-.overlay-text.dc-load,
-.overlay-text.og-pv-fuse,
-.overlay-text.og-dc-surge,
-.overlay-text.og-pv-breaker,
-.overlay-text.og-ctrl-batt-breaker,
-.overlay-text.og-batt-inv-breaker,
-.overlay-text.og-ac-surge,
-.overlay-text.og-ac-breaker,
-.overlay-text.og-ac-fuse,
-.overlay-text.gridtie-inverter,
-.overlay-text.gt-pv-fuse,
-.overlay-text.gt-dc-surge,
-.overlay-text.gt-dc-breaker {
-  font-size: 0.6em; /* ขนาดตัวอักษรบนจอคอมพิวเตอร์ */
+/* --- Base Font Size for Overlays --- */
+.overlay-text {
+  font-size: 0.6em;
 }
 
-/* --- START: ส่วนที่เพิ่มเข้ามาสำหรับปรับการแสดงผลบนมือถือ --- */
+/* --- Responsive Overlays for Mobile --- */
 @media (max-width: 600px) {
-  /* คำสั่งให้ข้อความทั้งหมดเล็กลงเมื่ออยู่บนมือถือ */
   .overlay-text {
-    font-size: 0.5em; /* ทำให้ตัวอักษรเล็กลงอีกบนมือถือ */
+    font-size: 0.5em;
     padding: 2px 3px;
     border-width: 1px;
   }
 
-  /* จัดตำแหน่งข้อความของ Off-Grid ใหม่สำหรับมือถือ */
+  /* Mobile-specific position adjustments */
   .overlay-text.charge-controller {
     top: 35%;
     left: 35%;
@@ -505,8 +500,6 @@ footer {
     top: 73%;
     left: 78%;
   }
-
-  /* จัดตำแหน่งข้อความของ Grid-Tie ใหม่สำหรับมือถือ */
   .overlay-text.gridtie-inverter {
     top: 82%;
     left: 47%;
@@ -524,4 +517,3 @@ footer {
     left: 12%;
   }
 }
-/* --- END: ส่วนที่เพิ่มเข้ามา --- */

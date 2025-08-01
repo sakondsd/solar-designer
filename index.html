@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sakonnakhon DSD SolarCell Designer</title>
     <link rel="stylesheet" href="style.css" />
-    <!-- Google tag (gtag.js) -->
     <script
       async
       src="https://www.googletagmanager.com/gtag/js?id=G-L3V2BH7XWQ"
@@ -97,6 +96,7 @@
                     เครื่องปรับอากาศ (Air Conditioner)
                   </option>
                   <option value="เตารีด">เตารีด</option>
+                  <option value="เครื่องทำน้ำอุ่น">เครื่องทำน้ำอุ่น</option>
                   <option value="other">อื่นๆ (ระบุเอง)</option>
                 </select>
 
@@ -135,8 +135,13 @@
                 <label for="device-quantity">จำนวน:</label>
                 <input type="number" id="device-quantity" min="1" />
 
-                <label for="device-hours">ชั่วโมง/วัน:</label>
-                <input type="number" id="device-hours" min="1" max="24" />
+                <label>ระยะเวลาใช้งาน (ชั่วโมง / นาที ต่อวัน):</label>
+                <div class="time-inputs">
+                  <select id="device-hours"></select>
+                  <span>ชั่วโมง</span>
+                  <select id="device-minutes"></select>
+                  <span>นาที</span>
+                </div>
 
                 <button id="add-load-btn">เพิ่มโหลด</button>
               </div>
@@ -276,6 +281,15 @@
     </main>
 
     <footer>
+      <p>
+        พบปัญหาการใช้งาน?
+        <a
+          href="https://www.facebook.com/dsdskn"
+          target="_blank"
+          rel="noopener noreferrer"
+          >แจ้งผลตอบรับได้ที่นี่</a
+        >
+      </p>
       <p>&copy; 2025 SolarCell Designer by SAKON-DSD</p>
     </footer>
 

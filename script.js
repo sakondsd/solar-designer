@@ -17,7 +17,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const deviceNameOtherInput = document.getElementById("device-name-other");
   const devicePowerInput = document.getElementById("device-power");
   const deviceQuantityInput = document.getElementById("device-quantity");
-  const deviceHoursInput = document.getElementById("device-hours");
+  const deviceHoursSelect = document.getElementById("device-hours");
+  const deviceMinutesSelect = document.getElementById("device-minutes");
   const loadSummaryTableBody = document.querySelector(
     "#load-summary-table tbody"
   );
@@ -51,6 +52,21 @@ document.addEventListener("DOMContentLoaded", () => {
   let loads = [];
 
   // ---- Helper Functions ----
+  function populateTimeDropdowns() {
+    for (let i = 0; i <= 24; i++) {
+      const option = document.createElement("option");
+      option.value = i;
+      option.textContent = i;
+      deviceHoursSelect.appendChild(option);
+    }
+    for (let i = 0; i < 60; i++) {
+      const option = document.createElement("option");
+      option.value = i;
+      option.textContent = i;
+      deviceMinutesSelect.appendChild(option);
+    }
+  }
+
   function roundUpToStandard(value, standards) {
     for (const standard of standards) {
       if (value <= standard) return standard;
@@ -188,7 +204,6 @@ document.addEventListener("DOMContentLoaded", () => {
       "Wh/วัน"
     );
 
-    // START: Modified panel calculation display
     const theoreticalWp = pvEnergyRequiredWh / peakSunHours;
     addCalculationStep(
       "1.2 ขนาดแผง (ตามทฤษฎี)",
@@ -220,7 +235,6 @@ document.addEventListener("DOMContentLoaded", () => {
       `${actualNumPanels} × ${selectedPanelWattage}W`,
       `${actualWp.toFixed(0)} Wp`
     );
-    // END: Modified panel calculation display
 
     let maxInstantaneousLoadW = 0;
     loads.forEach((load) => {
@@ -601,7 +615,10 @@ document.addEventListener("DOMContentLoaded", () => {
         : deviceSelect.value;
     let power = parseFloat(devicePowerInput.value);
     const quantity = parseInt(deviceQuantityInput.value);
-    const hours = parseFloat(deviceHoursInput.value);
+
+    const selectedHours = parseInt(deviceHoursSelect.value, 10);
+    const selectedMinutes = parseInt(deviceMinutesSelect.value, 10);
+    const totalHours = selectedHours + selectedMinutes / 60;
 
     if (
       name === "เครื่องปรับอากาศ (Air Conditioner)" &&
@@ -617,16 +634,15 @@ document.addEventListener("DOMContentLoaded", () => {
       power > 0 &&
       !isNaN(quantity) &&
       quantity > 0 &&
-      !isNaN(hours) &&
-      hours > 0 &&
-      hours <= 24
+      !isNaN(totalHours) &&
+      totalHours > 0
     ) {
-      const totalWh = power * quantity * hours;
+      const totalWh = power * quantity * totalHours;
       loads.push({
         name,
         power: parseFloat(power.toFixed(2)),
         quantity,
-        hours,
+        hours: parseFloat(totalHours.toFixed(4)),
         totalWh,
       });
       renderLoadsTable();
@@ -638,9 +654,10 @@ document.addEventListener("DOMContentLoaded", () => {
       acUnitSelectionDiv.style.display = "none";
       devicePowerInput.value = "";
       deviceQuantityInput.value = "";
-      deviceHoursInput.value = "";
+      deviceHoursSelect.value = "0";
+      deviceMinutesSelect.value = "0";
     } else {
-      alert("กรุณากรอกข้อมูลโหลดให้ครบถ้วนและถูกต้อง");
+      alert("กรุณากรอกข้อมูลโหลดให้ครบถ้วนและถูกต้อง (รวมถึงระยะเวลาใช้งาน)");
     }
   });
 
@@ -653,6 +670,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Initial setup
+  populateTimeDropdowns();
   renderLoadsTable();
   updateOverallTotalEnergy();
   updateMaxLoad();
