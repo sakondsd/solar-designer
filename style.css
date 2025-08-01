@@ -364,8 +364,8 @@ h3 {
   left: 46%;
 }
 .overlay-text.inverter {
-  top: 73%;
-  left: 74%;
+  top: 77%;
+  left: 69%;
 }
 .overlay-text.ac-load {
   top: 64%;
@@ -381,19 +381,19 @@ h3 {
 }
 .overlay-text.og-dc-surge {
   top: 32%;
-  left: 15%;
+  left: 12%;
 }
 .overlay-text.og-pv-breaker {
   top: 32%;
-  left: 25%;
+  left: 24%;
 }
 .overlay-text.og-ctrl-batt-breaker {
   top: 32%;
-  left: 46%;
+  left: 45%;
 }
 .overlay-text.og-batt-inv-breaker {
   top: 32%;
-  left: 55%;
+  left: 56%;
 }
 .overlay-text.og-ac-surge {
   top: 10%;
@@ -401,12 +401,12 @@ h3 {
 }
 .overlay-text.og-ac-breaker {
   top: 10%;
-  left: 86%;
+  left: 88%;
 }
 .overlay-text.og-ac-fuse {
   /* Added new position for AC Fuse */
   top: 10%;
-  left: 65%;
+  left: 63%;
 }
 
 /* --- Positions for Grid-Tie Diagram --- */
