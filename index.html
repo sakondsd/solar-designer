@@ -40,6 +40,11 @@
             <h3>Grid-Tie System</h3>
             <button>เลือก Grid-Tie</button>
           </div>
+          <div class="system-card" data-system="hybrid">
+            <img src="images/Hybrid On-Off Grid.png" alt="Hybrid System" />
+            <h3>Hybrid System</h3>
+            <button>เลือก Hybrid</button>
+          </div>
         </div>
       </section>
 
@@ -176,8 +181,8 @@
                 </tfoot>
               </table>
             </div>
-            <div id="additional-params-off-grid" style="display: none">
-              <h3>ตัวแปรเสริมสำหรับ Off-Grid</h3>
+            <div id="additional-params-off-grid">
+              <h3>ตัวแปรเสริมสำหรับ Off-Grid / Hybrid</h3>
               <label for="autonomy-days">จำนวนวันสำรองไฟ:</label>
               <input type="number" id="autonomy-days" value="2" min="1" />
               <p class="param-description">
@@ -188,7 +193,7 @@
               <select id="battery-voltage">
                 <option value="12">12V</option>
                 <option value="24">24V</option>
-                <option value="48">48V</option>
+                <option value="48V" selected>48V</option>
               </select>
               <p class="param-description">
                 แรงดันของระบบแบตเตอรี่ที่ต้องการใช้งาน
@@ -282,9 +287,9 @@
 
     <footer>
       <p>
-        พบปัญหาการใช้งาน? ติดต่อ toedsin.so@dsd.go.th ->
+        พบปัญหาการใช้งาน ติดต่อ toedsin.so@dsd.go.th ?
         <a
-          href="https://www.facebook.com/DSD.Sakonnakhon"
+          href="https://www.facebook.com/dsdskn"
           target="_blank"
           rel="noopener noreferrer"
           >แจ้งผลตอบรับได้ที่นี่</a

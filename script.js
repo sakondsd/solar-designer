@@ -12,6 +12,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const gridTieCard = document.querySelector(
     '.system-card[data-system="grid-tie"]'
   );
+  const hybridCard = document.querySelector(
+    '.system-card[data-system="hybrid"]'
+  );
   const addLoadBtn = document.getElementById("add-load-btn");
   const deviceSelect = document.getElementById("device-select");
   const deviceNameOtherInput = document.getElementById("device-name-other");
@@ -523,6 +526,192 @@ document.addEventListener("DOMContentLoaded", () => {
     addOverlayText(`${recommendedDCBreaker}A\nDC Breaker`, "gt-dc-breaker");
   }
 
+  // START: New function for Hybrid System
+  function calculateHybrid() {
+    clearCalculationDetails();
+    const totalDailyLoadEnergyWh = updateOverallTotalEnergy();
+    if (totalDailyLoadEnergyWh === 0) {
+      alert("กรุณาเพิ่มโหลดการใช้งานก่อนคำนวณ");
+      return;
+    }
+    const isc = parseFloat(panelIscInput.value);
+    if (isNaN(isc) || isc <= 0) {
+      alert("กรุณาเลือกขนาดแผงโซลาร์เซลล์ (เพื่อหาค่า Isc)");
+      return;
+    }
+    const selectedOption = panelIscInput.options[panelIscInput.selectedIndex];
+    const selectedPanelWattage = parseInt(selectedOption.text);
+    const autonomyDays = parseFloat(autonomyDaysInput.value);
+    const batteryVoltage = parseFloat(batteryVoltageSelect.value);
+    const dod = parseFloat(dodInput.value) / 100;
+    const inverterEfficiency = parseFloat(inverterEfficiencyInput.value) / 100;
+    const systemLossFactor = parseFloat(systemLossFactorInput.value) / 100;
+    const peakSunHours = parseFloat(peakSunHoursInput.value);
+    addSubheading("1. ขนาดระบบหลัก (System Sizing)");
+    const pvEnergyRequiredWh =
+      totalDailyLoadEnergyWh / inverterEfficiency / systemLossFactor;
+    addCalculationStep(
+      "1.1 พลังงานที่ต้องการจากแผง",
+      `(พลังงานโหลด / Eff. Inv) / Loss`,
+      `(${totalDailyLoadEnergyWh.toFixed(
+        2
+      )} / ${inverterEfficiency}) / ${systemLossFactor}`,
+      pvEnergyRequiredWh.toFixed(2),
+      "Wh/วัน"
+    );
+    const theoreticalWp = pvEnergyRequiredWh / peakSunHours;
+    addCalculationStep(
+      "1.2 ขนาดแผง (ตามทฤษฎี)",
+      `พลังงานจากแผง / PSH`,
+      `${pvEnergyRequiredWh.toFixed(2)}Wh / ${peakSunHours}h`,
+      `${theoreticalWp.toFixed(2)} Wp`
+    );
+    const theoreticalNumPanels = Math.ceil(
+      theoreticalWp / selectedPanelWattage
+    );
+    const panelVoc = 48;
+    const controllerMaxVoltage = 150;
+    const maxPanelsInSeries = Math.floor(controllerMaxVoltage / panelVoc);
+    const numStrings = Math.ceil(theoreticalNumPanels / maxPanelsInSeries);
+    const actualNumPanels = numStrings * maxPanelsInSeries;
+    const actualWp = actualNumPanels * selectedPanelWattage;
+    addCalculationStep(
+      "1.3 การต่อแผง",
+      `คำนวณจาก Wp ทฤษฎีและการจัดวาง`,
+      `จาก ${theoreticalWp.toFixed(2)}Wp จัดวางให้ได้ ${actualNumPanels} แผง`,
+      `ต่ออนุกรมสตริงละ ${maxPanelsInSeries} แผง, จำนวน ${numStrings} สตริง`
+    );
+    addCalculationStep(
+      "1.4 ขนาดแผง (ติดตั้งจริง)",
+      `จำนวนแผงจริง × W แผง`,
+      `${actualNumPanels} × ${selectedPanelWattage}W`,
+      `${actualWp.toFixed(0)} Wp`
+    );
+    let maxInstantaneousLoadW = 0;
+    loads.forEach((load) => {
+      maxInstantaneousLoadW += load.power * load.quantity;
+    });
+    const inverterSizeW = maxInstantaneousLoadW * 1.25;
+    const recommendedInverterkW = roundUpToStandard(
+      inverterSizeW / 1000,
+      [1.5, 3, 5, 10]
+    );
+    addCalculationStep(
+      "1.5 ขนาด Hybrid Inverter",
+      `โหลดสูงสุด × 1.25`,
+      `${maxInstantaneousLoadW.toFixed(2)}W × 1.25`,
+      `${inverterSizeW.toFixed(2)} W (แนะนำ ${recommendedInverterkW}kW)`
+    );
+    const energyFromBatteryWh =
+      (totalDailyLoadEnergyWh * autonomyDays) / inverterEfficiency;
+    const batteryCapacityAh = energyFromBatteryWh / (batteryVoltage * dod);
+    const recommendedBatteryAh = 100;
+    const numBatteries = Math.ceil(batteryCapacityAh / recommendedBatteryAh);
+    addCalculationStep(
+      "1.6 ขนาดแบตเตอรี่",
+      `(พลังงานโหลด × วันสำรอง) / (V × DoD × Eff. Inv)`,
+      `(${totalDailyLoadEnergyWh.toFixed(
+        2
+      )} × ${autonomyDays}) / (${batteryVoltage} × ${dod} × ${inverterEfficiency})`,
+      `${batteryCapacityAh.toFixed(
+        2
+      )} Ah (แนะนำ ${numBatteries} ลูก ${recommendedBatteryAh}Ah ${batteryVoltage}V)`
+    );
+
+    addSubheading("2. อุปกรณ์ป้องกันฝั่ง DC");
+    const requiredFuseCurrent = isc * 1.56;
+    const recommendedFuse = roundUpToStandard(
+      requiredFuseCurrent,
+      [10, 15, 20, 25, 30]
+    );
+    addCalculationStep(
+      "2.1 PV String Fuse",
+      `Isc × 1.56`,
+      `${isc.toFixed(2)}A × 1.56`,
+      `แนะนำ ${recommendedFuse}A (ป้องกันกระแสเกินในสายแผง)`
+    );
+    addCalculationStep(
+      "2.2 DC Surge (PV)",
+      "เลือกตามแรงดันระบบ",
+      ``,
+      `แนะนำ > ${controllerMaxVoltage}Vdc (ป้องกันฟ้าผ่า/ไฟกระชากฝั่งแผง)`
+    );
+    const maxPanelCurrentA = (actualWp / batteryVoltage) * 1.25;
+    const recommendedPVBreaker = roundUpToStandard(
+      maxPanelCurrentA,
+      [16, 20, 25, 32, 40, 50, 63, 80, 100, 125]
+    );
+    addCalculationStep(
+      "2.3 DC Breaker (PV Input)",
+      `(Wpจริง / Vระบบ) × 1.25`,
+      `(${actualWp.toFixed(2)}W / ${batteryVoltage}V) × 1.25`,
+      `แนะนำ ${recommendedPVBreaker}A`
+    );
+    const maxInverterCurrent =
+      ((recommendedInverterkW * 1000) / batteryVoltage) * 1.25;
+    const recommendedBatteryBreaker = roundUpToStandard(
+      maxInverterCurrent,
+      [63, 80, 100, 125, 150, 200]
+    );
+    addCalculationStep(
+      "2.4 DC Breaker (Battery)",
+      `(P_inv / Vระบบ) × 1.25`,
+      `(${recommendedInverterkW * 1000}W / ${batteryVoltage}V) × 1.25`,
+      `แนะนำ ${recommendedBatteryBreaker}A`
+    );
+
+    addSubheading("3. อุปกรณ์ป้องกันฝั่ง AC");
+    const maxACCurrent = ((recommendedInverterkW * 1000) / 230) * 1.25;
+    const recommendedACBreaker = roundUpToStandard(
+      maxACCurrent,
+      [16, 20, 25, 32, 50]
+    );
+    const recommendedACFuse = recommendedACBreaker;
+    addCalculationStep(
+      "3.1 AC Fuse (Output)",
+      `เลือกให้เท่ากับ AC Breaker`,
+      ``,
+      `แนะนำ ${recommendedACFuse}A (ฟิวส์ป้องกันโหลด AC)`
+    );
+    addCalculationStep(
+      "3.2 AC Surge (Output)",
+      "เลือกตามแรงดันไฟบ้าน",
+      ``,
+      `แนะนำ 275Vac (ป้องกันไฟกระชากฝั่ง AC)`
+    );
+    addCalculationStep(
+      "3.3 AC Breaker (Output)",
+      `(P_inv / 230V) × 1.25`,
+      `(${recommendedInverterkW * 1000}W / 230V) × 1.25`,
+      `แนะนำ ${recommendedACBreaker}A`
+    );
+
+    addOverlayText(
+      `${selectedPanelWattage}W x ${actualNumPanels} แผง`,
+      "hy-solar"
+    );
+    addOverlayText(
+      `${recommendedInverterkW} kW\nHybrid Inverter`,
+      "hy-inverter"
+    );
+    addOverlayText(
+      `${recommendedBatteryAh}Ah x ${numBatteries} ลูก`,
+      "hy-battery"
+    );
+    addOverlayText(`${recommendedPVBreaker}A\nDC Breaker`, "hy-dc-breaker");
+    addOverlayText(
+      `${recommendedBatteryBreaker}A\nBatt Breaker`,
+      "hy-batt-breaker"
+    );
+    addOverlayText(`${recommendedACBreaker}A\nAC Breaker`, "hy-ac-breaker");
+    addOverlayText(`มิเตอร์`, "hy-meter");
+    addOverlayText(`${recommendedFuse}A\nFuse DC`, "hy-pv-fuse");
+    addOverlayText(`>${controllerMaxVoltage}Vdc\nDC Surge`, "hy-dc-surge");
+    addOverlayText(`${recommendedACFuse}A\nAC Fuse`, "hy-ac-fuse");
+    addOverlayText(`275Vac\nAC Surge`, "hy-ac-surge");
+  }
+  // END: New function for Hybrid System
+
   // ---- Event Listeners ----
   offGridCard.addEventListener("click", () => {
     currentSystem = "off-grid";
@@ -552,6 +741,22 @@ document.addEventListener("DOMContentLoaded", () => {
     clearCalculationDetails();
   });
 
+  hybridCard.addEventListener("click", () => {
+    currentSystem = "hybrid";
+    systemTitle.textContent = "ออกแบบ Hybrid System";
+    systemDiagram.src = "images/Hybrid On-Off Grid.png";
+    gridTieInputsDiv.style.display = "none";
+    loadInputWrapperDiv.style.display = "block";
+    additionalParamsOffGrid.style.display = "block";
+    systemSelectionSection.style.display = "none";
+    designAreaSection.style.display = "block";
+    clearCalculationDetails();
+    loads = [];
+    renderLoadsTable();
+    updateOverallTotalEnergy();
+    updateMaxLoad();
+  });
+
   backToSelectionBtn.addEventListener("click", () => {
     systemSelectionSection.style.display = "block";
     designAreaSection.style.display = "none";
@@ -564,14 +769,11 @@ document.addEventListener("DOMContentLoaded", () => {
       deviceSelect.value === "เครื่องปรับอากาศ (Air Conditioner)"
         ? "flex"
         : "none";
-    // START: Logic for Water Heater time unit
     const timeUnitDiv = document.getElementById("time-unit-selection");
     if (timeUnitDiv) {
-      // Check if element exists before changing style
       timeUnitDiv.style.display =
         deviceSelect.value === "เครื่องทำน้ำอุ่น" ? "flex" : "none";
     }
-    // END: Logic
   });
 
   addLoadBtn.addEventListener("click", () => {
@@ -581,7 +783,6 @@ document.addEventListener("DOMContentLoaded", () => {
         : deviceSelect.value;
     let power = parseFloat(devicePowerInput.value);
     const quantity = parseInt(deviceQuantityInput.value);
-
     const selectedHours = parseInt(deviceHoursSelect.value, 10);
     const selectedMinutes = parseInt(deviceMinutesSelect.value, 10);
     const totalHours = selectedHours + selectedMinutes / 60;
@@ -620,7 +821,6 @@ document.addEventListener("DOMContentLoaded", () => {
       acUnitSelectionDiv.style.display = "none";
       const timeUnitDiv = document.getElementById("time-unit-selection");
       if (timeUnitDiv) timeUnitDiv.style.display = "none";
-
       devicePowerInput.value = "";
       deviceQuantityInput.value = "";
       deviceHoursSelect.value = "0";
@@ -635,6 +835,8 @@ document.addEventListener("DOMContentLoaded", () => {
       calculateOffGrid();
     } else if (currentSystem === "grid-tie") {
       calculateGridTie();
+    } else if (currentSystem === "hybrid") {
+      calculateHybrid();
     }
   });
 

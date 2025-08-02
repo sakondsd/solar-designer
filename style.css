@@ -364,6 +364,11 @@ h3 {
   transform: translateX(-50%);
 }
 
+/* --- Base Font Size for Overlays --- */
+.overlay-text {
+  font-size: 0.6em;
+}
+
 /* --- Positions for Off-Grid Diagram --- */
 .overlay-text.solar-panels {
   top: 15%;
@@ -378,8 +383,8 @@ h3 {
   left: 46%;
 }
 .overlay-text.inverter {
-  top: 77%;
-  left: 69%;
+  top: 73%;
+  left: 74%;
 }
 .overlay-text.ac-load {
   top: 64%;
@@ -395,19 +400,19 @@ h3 {
 }
 .overlay-text.og-dc-surge {
   top: 32%;
-  left: 12%;
+  left: 15%;
 }
 .overlay-text.og-pv-breaker {
   top: 32%;
-  left: 24%;
+  left: 25%;
 }
 .overlay-text.og-ctrl-batt-breaker {
   top: 32%;
-  left: 45%;
+  left: 46%;
 }
 .overlay-text.og-batt-inv-breaker {
   top: 32%;
-  left: 56%;
+  left: 55%;
 }
 .overlay-text.og-ac-surge {
   top: 10%;
@@ -415,11 +420,11 @@ h3 {
 }
 .overlay-text.og-ac-breaker {
   top: 10%;
-  left: 88%;
+  left: 86%;
 }
 .overlay-text.og-ac-fuse {
   top: 10%;
-  left: 63%;
+  left: 65%;
 }
 
 /* --- Positions for Grid-Tie Diagram --- */
@@ -438,6 +443,52 @@ h3 {
 .overlay-text.gt-dc-breaker {
   top: 36%;
   left: 28%;
+}
+
+/* --- Positions for Hybrid Diagram --- */
+.overlay-text.hy-solar {
+  top: 18%;
+  left: 25%;
+}
+.overlay-text.hy-inverter {
+  top: 3%;
+  left: 48%;
+}
+.overlay-text.hy-battery {
+  top: 89%;
+  left: 50%;
+}
+.overlay-text.hy-meter {
+  top: 10%;
+  left: 85%;
+}
+.overlay-text.hy-dc-breaker {
+  top: 34%;
+  left: 28%;
+}
+.overlay-text.hy-batt-breaker {
+  top: 72%;
+  left: 34%;
+}
+.overlay-text.hy-ac-breaker {
+  top: 35%;
+  left: 90%;
+}
+.overlay-text.hy-pv-fuse {
+  top: 34%;
+  left: 10%;
+}
+.overlay-text.hy-dc-surge {
+  top: 75%;
+  left: 15%;
+}
+.overlay-text.hy-ac-fuse {
+  top: 35%;
+  left: 77%;
+}
+.overlay-text.hy-ac-surge {
+  top: 62%;
+  left: 82%;
 }
 
 footer {
@@ -472,15 +523,8 @@ footer {
     margin: 15px;
     padding: 15px;
   }
-}
 
-/* --- Base Font Size for Overlays --- */
-.overlay-text {
-  font-size: 0.6em;
-}
-
-/* --- Responsive Overlays for Mobile --- */
-@media (max-width: 600px) {
+  /* Responsive Overlays for Mobile */
   .overlay-text {
     font-size: 0.5em;
     padding: 2px 3px;
@@ -516,4 +560,31 @@ footer {
     top: 77%;
     left: 12%;
   }
+
+  /* START: New positions for Hybrid on Mobile */
+  .overlay-text.hy-solar {
+    top: 15%;
+    left: 20%;
+  }
+  .overlay-text.hy-inverter {
+    top: 40%;
+    left: 50%;
+  }
+  .overlay-text.hy-battery {
+    top: 80%;
+    left: 50%;
+  }
+  .overlay-text.hy-dc-breaker {
+    top: 55%;
+    left: 25%;
+  }
+  .overlay-text.hy-batt-breaker {
+    top: 65%;
+    left: 38%;
+  }
+  .overlay-text.hy-ac-breaker {
+    top: 55%;
+    left: 80%;
+  }
+  /* END: New positions for Hybrid on Mobile */
 }
