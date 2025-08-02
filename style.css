@@ -659,3 +659,74 @@ footer a:hover {
   }
   /* END: New positions for Water System on Mobile */
 }
+/* --- START: Credits Page Styles --- */
+.credits-container {
+  padding: 2em;
+  text-align: center;
+}
+
+.credits-intro {
+  max-width: 700px;
+  margin: 0 auto 2em auto;
+  font-size: 1.1em;
+  color: #555;
+}
+
+.credits-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.credit-card {
+  background-color: var(--section-background);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1.5em;
+  width: 250px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.credit-card h3 {
+  margin-top: 0;
+  color: var(--dark-cyan);
+}
+
+.credit-card p {
+  margin: 0.2em 0;
+}
+
+.back-link {
+  margin-top: 3em;
+}
+
+.back-link a,
+.credits-link {
+  color: var(--dark-cyan);
+  text-decoration: none;
+  font-weight: bold;
+  border: 2px solid var(--sand);
+  padding: 10px 20px;
+  border-radius: 5px;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.back-link a:hover,
+.credits-link:hover {
+  background-color: var(--sand);
+  color: var(--almost-black);
+}
+
+footer .credits-link {
+  border: none;
+  padding: 0;
+  color: var(--sand);
+  text-decoration: underline;
+}
+
+footer .credits-link:hover {
+  background-color: transparent;
+  color: var(--bright-cyan);
+}
+/* --- END: Credits Page Styles --- */
