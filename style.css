@@ -34,9 +34,28 @@ body {
 header {
   background-color: var(--header-footer-bg);
   color: var(--header-footer-text);
-  padding: 1.2em 0;
+  padding: 2em 0; /* เพิ่มระยะห่างแนวตั้ง */
   text-align: center;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+header h1 {
+  color: white; /* ทำให้สีหัวข้อหลักเป็นสีขาว */
+  font-size: 2.5em; /* เพิ่มขนาดตัวอักษร */
+  margin: 0 0 0.5em 0;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* เพิ่มเงาให้ข้อความ */
+}
+
+header p {
+  font-size: 1.1em; /* เพิ่มขนาดตัวอักษรเล็กน้อย */
+  margin: 0.2em 0; /* ปรับระยะห่างระหว่างบรรทัด */
+  color: var(--sand); /* เปลี่ยนสีข้อความรองให้ดูนุ่มนวลขึ้น */
+}
+/* Style for the author line in the header */
+header .author {
+  color: #fdfbf8; /* หรือสีอื่นๆ ที่คุณต้องการ เช่น #FFFFFF (สีขาว) */
+  font-size: 1em;
+  margin-top: 1em; /* เพิ่มระยะห่างจากบรรทัดบน */
 }
 
 main {
@@ -587,4 +606,13 @@ footer {
     left: 80%;
   }
   /* END: New positions for Hybrid on Mobile */
+}
+/* --- Fix Footer Link Color --- */
+footer a {
+  color: var(--sand); /* เปลี่ยนเป็นสี sand หรือ off-white */
+  text-decoration: underline;
+}
+
+footer a:hover {
+  color: var(--bright-cyan); /* เปลี่ยนสีเมื่อเอาเมาส์ไปชี้ */
 }
