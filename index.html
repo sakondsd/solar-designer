@@ -22,13 +22,13 @@
   <body>
     <header>
       <h1>Sakonnakhon DSD SolarCell Designer</h1>
-      <p>เครื่องมือช่วยออกแบบระบบ Solar Cell เบื้องต้น</p>
+      <p>เครื่องมือช่วยออกแบบระบบพลังงานทดแทนเบื้องต้น</p>
       <p class="author">โดย สำนักงานพัฒนาฝีมือแรงงานสกลนคร</p>
     </header>
 
     <main>
       <section id="system-selection">
-        <h2>เลือกระบบ Solar Cell ที่คุณต้องการออกแบบ</h2>
+        <h2>เลือกระบบที่คุณต้องการออกแบบ</h2>
         <div class="system-options">
           <div class="system-card" data-system="off-grid">
             <img src="images/Off Grid.png" alt="Off-Grid System" />
@@ -45,6 +45,11 @@
             <h3>Hybrid System</h3>
             <button>เลือก Hybrid</button>
           </div>
+          <div class="system-card" data-system="water-system">
+            <img src="images/water-system.png" alt="Water System" />
+            <h3>ระบบน้ำสปริงเกอร์</h3>
+            <button>เลือกระบบน้ำ</button>
+          </div>
         </div>
       </section>
 
@@ -53,6 +58,49 @@
         <h2 id="system-title"></h2>
         <div class="design-content">
           <div class="load-input-section">
+            <div id="water-system-inputs" style="display: none">
+              <h3>ออกแบบระบบน้ำสปริงเกอร์</h3>
+              <label for="sprinkler-flow-rate"
+                >อัตราการจ่ายน้ำของสปริงเกอร์ (ลิตร/ชั่วโมง):</label
+              >
+              <input type="number" id="sprinkler-flow-rate" value="500" />
+              <p class="param-description">
+                ปริมาณน้ำที่สปริงเกอร์แต่ละตัวจ่ายออกมาใน 1 ชั่วโมง
+              </p>
+
+              <label for="sprinklers-per-zone"
+                >จำนวนสปริงเกอร์ต่อโซน (ตัว):</label
+              >
+              <input type="number" id="sprinklers-per-zone" value="10" />
+              <p class="param-description">
+                จำนวนสปริงเกอร์สูงสุดที่จะเปิดใช้งานพร้อมกันใน 1 โซน
+              </p>
+
+              <label for="total-zones">จำนวนโซนทั้งหมด (โซน):</label>
+              <input type="number" id="total-zones" value="1" />
+              <p class="param-description">จำนวนโซนรดน้ำทั้งหมดในพื้นที่</p>
+
+              <label for="sprinkler-pressure"
+                >แรงดันใช้งานของสปริงเกอร์ (บาร์):</label
+              >
+              <input type="number" id="sprinkler-pressure" value="2" />
+              <p class="param-description">
+                แรงดันที่สปริงเกอร์ต้องการเพื่อให้ทำงานได้เต็มประสิทธิภาพ
+              </p>
+
+              <label for="static-head">ความสูงแนวดิ่ง (เมตร):</label>
+              <input type="number" id="static-head" value="5" />
+              <p class="param-description">
+                ระยะความสูงจากแหล่งน้ำไปยังจุดที่สูงที่สุดของสวน
+              </p>
+
+              <label for="pipe-length">ความยาวท่อเมนที่ไกลที่สุด (เมตร):</label>
+              <input type="number" id="pipe-length" value="50" />
+              <p class="param-description">
+                ความยาวของท่อเส้นหลักจากปั๊มไปยังโซนที่อยู่ไกลที่สุด
+              </p>
+            </div>
+
             <div id="grid-tie-inputs" style="display: none">
               <h3>กำหนดค่าสำหรับ Grid-Tie</h3>
               <label for="grid-tie-system-size"
@@ -69,7 +117,6 @@
               <p class="param-description">
                 เลือกขนาดอินเวอร์เตอร์ที่ต้องการติดตั้ง
               </p>
-
               <label for="electricity-price">ค่าไฟฟ้าต่อหน่วย (บาท/kWh):</label>
               <input
                 type="number"
@@ -81,6 +128,7 @@
                 ใส่ค่าไฟตามบิลการไฟฟ้าเพื่อคำนวณการประหยัด
               </p>
             </div>
+
             <div id="load-input-wrapper">
               <h3>บันทึกโหลดการใช้งาน (Load Input)</h3>
               <div class="load-form">
@@ -181,6 +229,7 @@
                 </tfoot>
               </table>
             </div>
+
             <div id="additional-params-off-grid">
               <h3>ตัวแปรเสริมสำหรับ Off-Grid / Hybrid</h3>
               <label for="autonomy-days">จำนวนวันสำรองไฟ:</label>
@@ -188,19 +237,17 @@
               <p class="param-description">
                 จำนวนวันที่ระบบสามารถจ่ายไฟได้โดยไม่มีแดด
               </p>
-
               <label for="battery-voltage">แรงดันระบบแบตเตอรี่ (V):</label>
               <select id="battery-voltage">
                 <option value="12">12V</option>
                 <option value="24">24V</option>
-                <option value="48V" selected>48V</option>
+                <option value="48" selected>48V</option>
               </select>
               <p class="param-description">
                 แรงดันของระบบแบตเตอรี่ที่ต้องการใช้งาน
               </p>
-
               <label for="dod">Depth of Discharge (DoD) (%):</label>
-              <input type="number" id="dod" value="50" min="1" max="100" />
+              <input type="number" id="dod" value="80" min="1" max="100" />
               <p class="param-description">
                 ความลึกในการคายประจุ (Lead-Acid ~50%, LiFePO4 ~80%)
               </p>
@@ -225,31 +272,28 @@
               <p class="param-description">
                 ค่ากระแสลัดวงจร (Isc) ใช้คำนวณอุปกรณ์ป้องกัน
               </p>
-
               <label for="inverter-efficiency">ประสิทธิภาพ Inverter (%):</label>
               <input
                 type="number"
                 id="inverter-efficiency"
-                value="90"
+                value="95"
                 min="50"
                 max="100"
               />
               <p class="param-description">
                 การสูญเสียพลังงานเมื่อแปลงไฟ DC เป็น AC (ปกติ 90-95%)
               </p>
-
               <label for="system-loss-factor">System Loss Factor (%):</label>
               <input
                 type="number"
                 id="system-loss-factor"
-                value="80"
+                value="85"
                 min="50"
                 max="100"
               />
               <p class="param-description">
                 การสูญเสียรวมในระบบ เช่น ความร้อน, ความสกปรก (ปกติ 75-85%)
               </p>
-
               <label for="peak-sun-hours">ชั่วโมงแดดต่อวัน (PSH):</label>
               <input
                 type="number"
@@ -270,7 +314,7 @@
           <div class="result-section">
             <h3>ผลลัพธ์การออกแบบระบบ</h3>
             <div class="results-wrapper">
-              <div class="system-diagram-container">
+              <div id="diagram-wrapper" class="system-diagram-container">
                 <h4>ภาพวงจร</h4>
                 <div id="diagram-overlay">
                   <img id="system-diagram" src="" alt="System Diagram" />
@@ -287,7 +331,7 @@
 
     <footer>
       <p>
-        พบปัญหาการใช้งาน ติดต่อ toedsin.so@dsd.go.th ?
+        พบปัญหาการใช้งาน ? ติดต่อ toedsin.so@dsd.go.th ->
         <a
           href="https://www.facebook.com/DSD.Sakonnakhon"
           target="_blank"

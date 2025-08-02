@@ -34,28 +34,27 @@ body {
 header {
   background-color: var(--header-footer-bg);
   color: var(--header-footer-text);
-  padding: 2em 0; /* เพิ่มระยะห่างแนวตั้ง */
+  padding: 2em 0;
   text-align: center;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 header h1 {
-  color: white; /* ทำให้สีหัวข้อหลักเป็นสีขาว */
-  font-size: 2.5em; /* เพิ่มขนาดตัวอักษร */
+  color: white;
+  font-size: 2.5em;
   margin: 0 0 0.5em 0;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* เพิ่มเงาให้ข้อความ */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 header p {
-  font-size: 1.1em; /* เพิ่มขนาดตัวอักษรเล็กน้อย */
-  margin: 0.2em 0; /* ปรับระยะห่างระหว่างบรรทัด */
-  color: var(--sand); /* เปลี่ยนสีข้อความรองให้ดูนุ่มนวลขึ้น */
+  font-size: 1.1em;
+  margin: 0.2em 0;
 }
-/* Style for the author line in the header */
+
 header .author {
-  color: #fdfbf8; /* หรือสีอื่นๆ ที่คุณต้องการ เช่น #FFFFFF (สีขาว) */
+  color: var(--sand);
   font-size: 1em;
-  margin-top: 1em; /* เพิ่มระยะห่างจากบรรทัดบน */
+  margin-top: 1em;
 }
 
 main {
@@ -168,7 +167,8 @@ h3 {
 .load-form label,
 #common-params label,
 #additional-params-off-grid label,
-#grid-tie-inputs label {
+#grid-tie-inputs label,
+#water-system-inputs label {
   display: block;
   margin-bottom: 5px;
   margin-top: 15px;
@@ -183,7 +183,8 @@ h3 {
 #common-params input,
 #common-params select,
 #grid-tie-inputs input,
-#grid-tie-inputs select {
+#grid-tie-inputs select,
+#water-system-inputs input {
   width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
@@ -467,47 +468,69 @@ h3 {
 /* --- Positions for Hybrid Diagram --- */
 .overlay-text.hy-solar {
   top: 18%;
-  left: 25%;
+  left: 20%;
 }
 .overlay-text.hy-inverter {
-  top: 3%;
-  left: 48%;
+  top: 40%;
+  left: 50%;
 }
 .overlay-text.hy-battery {
-  top: 89%;
+  top: 80%;
   left: 50%;
 }
 .overlay-text.hy-meter {
-  top: 10%;
-  left: 85%;
+  top: 25%;
+  left: 78%;
 }
 .overlay-text.hy-dc-breaker {
-  top: 34%;
+  top: 55%;
   left: 28%;
 }
 .overlay-text.hy-batt-breaker {
-  top: 72%;
-  left: 34%;
+  top: 65%;
+  left: 38%;
 }
 .overlay-text.hy-ac-breaker {
-  top: 35%;
-  left: 90%;
+  top: 55%;
+  left: 78%;
 }
 .overlay-text.hy-pv-fuse {
-  top: 34%;
-  left: 10%;
+  top: 45%;
+  left: 15%;
 }
 .overlay-text.hy-dc-surge {
-  top: 75%;
+  top: 58%;
   left: 15%;
 }
 .overlay-text.hy-ac-fuse {
-  top: 35%;
-  left: 77%;
+  top: 45%;
+  left: 68%;
 }
 .overlay-text.hy-ac-surge {
-  top: 62%;
-  left: 82%;
+  top: 58%;
+  left: 68%;
+}
+
+/* --- Positions for Water System Diagram --- */
+.overlay-text.ws-solar {
+  top: 16%;
+  left: 25%;
+}
+.overlay-text.ws-pump {
+  top: 65%;
+  left: 45%;
+}
+.overlay-text.ws-main-pipe {
+  top: 50%;
+  left: 65%;
+}
+.overlay-text.ws-submain-pipe {
+  top: 19%;
+  left: 48%;
+}
+.overlay-text.ws-sprinkler-pipe {
+  top: 19%;
+  left: 89%;
 }
 
 footer {
@@ -517,6 +540,15 @@ footer {
   background-color: var(--header-footer-bg);
   color: var(--header-footer-text);
   font-size: 0.9em;
+}
+
+footer a {
+  color: var(--sand);
+  text-decoration: underline;
+}
+
+footer a:hover {
+  color: var(--bright-cyan);
 }
 
 @media (max-width: 900px) {
@@ -579,8 +611,6 @@ footer {
     top: 77%;
     left: 12%;
   }
-
-  /* START: New positions for Hybrid on Mobile */
   .overlay-text.hy-solar {
     top: 15%;
     left: 20%;
@@ -605,14 +635,27 @@ footer {
     top: 55%;
     left: 80%;
   }
-  /* END: New positions for Hybrid on Mobile */
-}
-/* --- Fix Footer Link Color --- */
-footer a {
-  color: var(--sand); /* เปลี่ยนเป็นสี sand หรือ off-white */
-  text-decoration: underline;
-}
 
-footer a:hover {
-  color: var(--bright-cyan); /* เปลี่ยนสีเมื่อเอาเมาส์ไปชี้ */
+  /* START: New positions for Water System on Mobile */
+  .overlay-text.ws-solar {
+    top: 20%;
+    left: 18%;
+  }
+  .overlay-text.ws-pump {
+    top: 70%;
+    left: 40%;
+  }
+  .overlay-text.ws-main-pipe {
+    top: 50%;
+    left: 60%;
+  }
+  .overlay-text.ws-submain-pipe {
+    top: 60%;
+    left: 75%;
+  }
+  .overlay-text.ws-sprinkler-pipe {
+    top: 40%;
+    left: 85%;
+  }
+  /* END: New positions for Water System on Mobile */
 }
