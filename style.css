@@ -22,6 +22,9 @@
   --highlight-color: var(--dark-cyan);
 }
 
+/* =================================
+   General Body & Typography Styles
+   ================================= */
 body {
   font-family: "Sarabun", Arial, sans-serif;
   margin: 0;
@@ -29,32 +32,6 @@ body {
   background-color: var(--background-color);
   color: var(--text-color);
   line-height: 1.6;
-}
-
-header {
-  background-color: var(--header-footer-bg);
-  color: var(--header-footer-text);
-  padding: 2em 0;
-  text-align: center;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
-
-header h1 {
-  color: white;
-  font-size: 2.5em;
-  margin: 0 0 0.5em 0;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-header p {
-  font-size: 1.1em;
-  margin: 0.2em 0;
-}
-
-header .author {
-  color: var(--sand);
-  font-size: 1em;
-  margin-top: 1em;
 }
 
 main {
@@ -72,6 +49,104 @@ h3 {
   color: var(--heading-color);
 }
 
+/* =================================
+   Header & Footer Styles
+   ================================= */
+header {
+  background-color: var(--header-footer-bg);
+  color: var(--header-footer-text);
+  padding: 2em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1em;
+}
+
+.header-text {
+  text-align: center;
+  order: 2;
+}
+
+header h1 {
+  color: white;
+  font-size: 2.2em;
+  margin: 0;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+header p {
+  font-size: 1.1em;
+  margin: 0.2em 0 0 0;
+}
+
+header .author {
+  color: var(--sand);
+  font-size: 1em;
+  margin-top: 0.5em;
+}
+
+.header-image-container {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid var(--sand);
+  order: 1;
+}
+
+.header-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+footer {
+  background-color: var(--header-footer-bg);
+  color: var(--header-footer-text);
+  padding: 2em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.5em;
+}
+
+.footer-image-container {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid var(--sand);
+  flex-shrink: 0;
+  order: 1;
+}
+
+.footer-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.footer-content {
+  order: 2;
+}
+
+footer p {
+  margin: 0.3em 0;
+}
+
+footer a {
+  color: var(--sand);
+  text-decoration: underline;
+}
+
+footer a:hover {
+  color: var(--bright-cyan);
+}
+
+/* =================================
+   Main Content & Card Styles
+   ================================= */
 #system-selection {
   text-align: center;
 }
@@ -164,6 +239,9 @@ h3 {
   border: 1px solid var(--border-color);
 }
 
+/* =================================
+   Form & Input Styles
+   ================================= */
 .load-form label,
 #common-params label,
 #additional-params-off-grid label,
@@ -293,6 +371,9 @@ h3 {
   color: var(--highlight-color);
 }
 
+/* =================================
+   Results & Diagram Styles
+   ================================= */
 .results-wrapper {
   display: flex;
   flex-direction: column;
@@ -370,6 +451,9 @@ h3 {
   display: inline-block;
 }
 
+/* =================================
+   Overlay Text Styles
+   ================================= */
 .overlay-text {
   position: absolute;
   background-color: rgba(247, 239, 229, 0.9);
@@ -382,11 +466,7 @@ h3 {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   text-align: center;
   transform: translateX(-50%);
-}
-
-/* --- Base Font Size for Overlays --- */
-.overlay-text {
-  font-size: 0.6em;
+  font-size: 0.6em; /* Base font size for overlays on desktop */
 }
 
 /* --- Positions for Off-Grid Diagram --- */
@@ -513,153 +593,67 @@ h3 {
 
 /* --- Positions for Water System Diagram --- */
 .overlay-text.ws-solar {
-  top: 16%;
-  left: 25%;
+  top: 20%;
+  left: 18%;
 }
 .overlay-text.ws-pump {
-  top: 65%;
-  left: 45%;
+  top: 70%;
+  left: 42%;
 }
 .overlay-text.ws-main-pipe {
   top: 50%;
   left: 65%;
 }
 .overlay-text.ws-submain-pipe {
-  top: 19%;
-  left: 48%;
+  top: 60%;
+  left: 80%;
 }
 .overlay-text.ws-sprinkler-pipe {
-  top: 19%;
-  left: 89%;
+  top: 40%;
+  left: 88%;
 }
 
-footer {
+/* =================================
+   Ad Box Styles
+   ================================= */
+.ad-container {
+  margin-top: 40px;
+  padding: 0 20px;
+}
+
+.ad-box {
+  border: 2px dashed var(--border-color);
+  background-color: white;
+  padding: 10px;
   text-align: center;
-  padding: 20px;
+  border-radius: 8px;
   margin-top: 30px;
-  background-color: var(--header-footer-bg);
-  color: var(--header-footer-text);
-  font-size: 0.9em;
+  box-sizing: border-box;
 }
 
-footer a {
-  color: var(--sand);
-  text-decoration: underline;
+.ad-box img {
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
-footer a:hover {
-  color: var(--bright-cyan);
+.ad-box.wide {
+  max-width: 728px;
+  min-height: 90px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-@media (max-width: 900px) {
-  .design-content {
-    flex-direction: column;
-  }
-  .load-input-section,
-  .result-section {
-    min-width: unset;
-    width: auto;
-  }
+.ad-box.medium {
+  max-width: 300px;
+  min-height: 250px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-@media (max-width: 600px) {
-  .system-options {
-    flex-direction: column;
-    align-items: center;
-  }
-  .system-card {
-    width: 90%;
-  }
-  main {
-    margin: 15px;
-    padding: 15px;
-  }
-
-  /* Responsive Overlays for Mobile */
-  .overlay-text {
-    font-size: 0.5em;
-    padding: 2px 3px;
-    border-width: 1px;
-  }
-
-  /* Mobile-specific position adjustments */
-  .overlay-text.charge-controller {
-    top: 35%;
-    left: 35%;
-  }
-  .overlay-text.battery {
-    top: 82%;
-    left: 48%;
-  }
-  .overlay-text.inverter {
-    top: 73%;
-    left: 78%;
-  }
-  .overlay-text.gridtie-inverter {
-    top: 82%;
-    left: 47%;
-  }
-  .overlay-text.gt-dc-breaker {
-    top: 40%;
-    left: 28%;
-  }
-  .overlay-text.gt-dc-surge {
-    top: 60%;
-    left: 18%;
-  }
-  .overlay-text.gt-pv-fuse {
-    top: 77%;
-    left: 12%;
-  }
-  .overlay-text.hy-solar {
-    top: 15%;
-    left: 20%;
-  }
-  .overlay-text.hy-inverter {
-    top: 40%;
-    left: 50%;
-  }
-  .overlay-text.hy-battery {
-    top: 80%;
-    left: 50%;
-  }
-  .overlay-text.hy-dc-breaker {
-    top: 55%;
-    left: 25%;
-  }
-  .overlay-text.hy-batt-breaker {
-    top: 65%;
-    left: 38%;
-  }
-  .overlay-text.hy-ac-breaker {
-    top: 55%;
-    left: 80%;
-  }
-
-  /* START: New positions for Water System on Mobile */
-  .overlay-text.ws-solar {
-    top: 20%;
-    left: 18%;
-  }
-  .overlay-text.ws-pump {
-    top: 70%;
-    left: 40%;
-  }
-  .overlay-text.ws-main-pipe {
-    top: 50%;
-    left: 60%;
-  }
-  .overlay-text.ws-submain-pipe {
-    top: 60%;
-    left: 75%;
-  }
-  .overlay-text.ws-sprinkler-pipe {
-    top: 40%;
-    left: 85%;
-  }
-  /* END: New positions for Water System on Mobile */
-}
-/* --- START: Credits Page Styles --- */
+/* =================================
+   Credits Page Styles
+   ================================= */
 .credits-container {
   padding: 2em;
   text-align: center;
@@ -729,4 +723,156 @@ footer .credits-link:hover {
   background-color: transparent;
   color: var(--bright-cyan);
 }
-/* --- END: Credits Page Styles --- */
+
+/* =================================
+   Responsive Styles (Media Queries)
+   ================================= */
+
+/* --- For Tablets and smaller desktops --- */
+@media (max-width: 900px) {
+  .design-content {
+    flex-direction: column;
+  }
+  .load-input-section,
+  .result-section {
+    min-width: unset;
+    width: auto;
+  }
+}
+
+/* --- For Mobile phones --- */
+@media (max-width: 768px) {
+  /* Header adjustments for smaller screens */
+  header {
+    flex-direction: row;
+    justify-content: center;
+    text-align: left;
+  }
+
+  .header-text {
+    order: 1;
+    text-align: center;
+  }
+
+  .header-image-container {
+    order: 2;
+    width: 100px;
+    height: 100px;
+  }
+
+  header h1 {
+    font-size: 1.8em;
+  }
+
+  /* Footer adjustments for smaller screens */
+  footer {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+}
+
+@media (max-width: 600px) {
+  .system-options {
+    flex-direction: column;
+    align-items: center;
+  }
+  .system-card {
+    width: 90%;
+  }
+  main {
+    margin: 15px;
+    padding: 15px;
+  }
+
+  /* Header adjustments for very small screens */
+  header {
+    flex-direction: column;
+    text-align: center;
+  }
+  .header-text {
+    text-align: center;
+    margin-bottom: 1.5em;
+  }
+
+  /* Responsive Overlays for Mobile */
+  .overlay-text {
+    font-size: 0.5em;
+    padding: 2px 3px;
+    border-width: 1px;
+  }
+
+  /* Mobile-specific position adjustments */
+  .overlay-text.charge-controller {
+    top: 35%;
+    left: 35%;
+  }
+  .overlay-text.battery {
+    top: 82%;
+    left: 48%;
+  }
+  .overlay-text.inverter {
+    top: 73%;
+    left: 78%;
+  }
+  .overlay-text.gridtie-inverter {
+    top: 82%;
+    left: 47%;
+  }
+  .overlay-text.gt-dc-breaker {
+    top: 40%;
+    left: 28%;
+  }
+  .overlay-text.gt-dc-surge {
+    top: 60%;
+    left: 18%;
+  }
+  .overlay-text.gt-pv-fuse {
+    top: 77%;
+    left: 12%;
+  }
+  .overlay-text.hy-solar {
+    top: 15%;
+    left: 20%;
+  }
+  .overlay-text.hy-inverter {
+    top: 40%;
+    left: 50%;
+  }
+  .overlay-text.hy-battery {
+    top: 80%;
+    left: 50%;
+  }
+  .overlay-text.hy-dc-breaker {
+    top: 55%;
+    left: 25%;
+  }
+  .overlay-text.hy-batt-breaker {
+    top: 65%;
+    left: 38%;
+  }
+  .overlay-text.hy-ac-breaker {
+    top: 55%;
+    left: 80%;
+  }
+  .overlay-text.ws-solar {
+    top: 20%;
+    left: 18%;
+  }
+  .overlay-text.ws-pump {
+    top: 70%;
+    left: 40%;
+  }
+  .overlay-text.ws-main-pipe {
+    top: 50%;
+    left: 60%;
+  }
+  .overlay-text.ws-submain-pipe {
+    top: 60%;
+    left: 75%;
+  }
+  .overlay-text.ws-sprinkler-pipe {
+    top: 40%;
+    left: 85%;
+  }
+}
