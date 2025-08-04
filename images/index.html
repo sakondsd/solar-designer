@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sakonnakhon DSD SolarCell Designer</title>
+    <link rel="stylesheet" href="style.css" />
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-L3V2BH7XWQ"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "G-L3V2BH7XWQ");
+    </script>
+  </head>
+  <body>
+    <header>
+      <img
+        src="images/logo.png"
+        alt="Sakonnakhon DSD Logo"
+        class="header-logo"
+      />
+      <div class="header-text">
+        <h1>Sakonnakhon DSD SolarCell Designer</h1>
+        <p>เครื่องมือช่วยออกแบบระบบพลังงานทดแทนเบื้องต้น</p>
+        <p class="author">โดย สำนักงานพัฒนาฝีมือแรงงานสกลนคร</p>
+      </div>
+    </header>
+
+    <main>
+      <section id="system-selection">
+        <h2>เลือกระบบที่คุณต้องการออกแบบ</h2>
+        <div class="system-options">
+          <div class="system-card" data-system="off-grid">
+            <img src="images/Off Grid.png" alt="Off-Grid System" />
+            <h3>1. ออกแบบ Off-Grid System</h3>
+            <button>เลือก Off-Grid</button>
+          </div>
+          <div class="system-card" data-system="grid-tie">
+            <img src="images/Grid Tie.png" alt="Grid-Tie System" />
+            <h3>2. ออกแบบ Grid-Tie System</h3>
+            <button>เลือก Grid-Tie</button>
+          </div>
+          <div class="system-card" data-system="hybrid">
+            <img src="images/Hybrid On-Off Grid.png" alt="Hybrid System" />
+            <h3>3. ออกแบบ Hybrid System</h3>
+            <button>เลือก Hybrid</button>
+          </div>
+          <div class="system-card" data-system="water-system">
+            <img src="images/water-system.png" alt="Water System" />
+            <h3>4. ออกแบบ ระบบน้ำสปริงเกอร์</h3>
+            <button>เลือกระบบน้ำ</button>
+          </div>
+          <a href="knowledge.html" class="system-card-link">
+            <div class="system-card">
+              <img src="images/knowledge2.png" alt="องค์ความรู้" />
+              <h3>5. ศึกษาความรู้ด้านโซลาร์เซลล์</h3>
+              <button>เข้าสู่บทเรียน</button>
+            </div>
+          </a>
+        </div>
+        <div class="ad-container">
+          <div class="ad-box wide">
+            <a
+              href="https://www.sponsor-website.com"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img src="images/ads/728x90.png" alt="โฆษณาแบนเนอร์" />
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section id="design-area" style="display: none">
+        <button id="back-to-selection">กลับหน้าเลือกระบบ</button>
+        <h2 id="system-title"></h2>
+        <div class="design-content">
+          <div class="load-input-section">
+            <div id="water-system-inputs" style="display: none">
+              <h3>ออกแบบระบบน้ำสปริงเกอร์</h3>
+              <label for="sprinkler-flow-rate"
+                >อัตราการจ่ายน้ำของสปริงเกอร์ (ลิตร/ชั่วโมง):</label
+              >
+              <input type="number" id="sprinkler-flow-rate" value="500" />
+              <p class="param-description">
+                ปริมาณน้ำที่สปริงเกอร์แต่ละตัวจ่ายออกมาใน 1 ชั่วโมง
+              </p>
+
+              <label for="sprinklers-per-zone"
+                >จำนวนสปริงเกอร์ต่อโซน (ตัว):</label
+              >
+              <input type="number" id="sprinklers-per-zone" value="10" />
+              <p class="param-description">
+                จำนวนสปริงเกอร์สูงสุดที่จะเปิดใช้งานพร้อมกันใน 1 โซน
+              </p>
+
+              <label for="total-zones">จำนวนโซนทั้งหมด (โซน):</label>
+              <input type="number" id="total-zones" value="1" />
+              <p class="param-description">จำนวนโซนรดน้ำทั้งหมดในพื้นที่</p>
+
+              <label for="sprinkler-pressure"
+                >แรงดันใช้งานของสปริงเกอร์ (บาร์):</label
+              >
+              <input type="number" id="sprinkler-pressure" value="2" />
+              <p class="param-description">
+                แรงดันที่สปริงเกอร์ต้องการเพื่อให้ทำงานได้เต็มประสิทธิภาพ
+              </p>
+
+              <label for="static-head">ความสูงแนวดิ่ง (เมตร):</label>
+              <input type="number" id="static-head" value="5" />
+              <p class="param-description">
+                ระยะความสูงจากแหล่งน้ำไปยังจุดที่สูงที่สุดของสวน
+              </p>
+
+              <label for="pipe-length">ความยาวท่อเมนที่ไกลที่สุด (เมตร):</label>
+              <input type="number" id="pipe-length" value="50" />
+              <p class="param-description">
+                ความยาวของท่อเส้นหลักจากปั๊มไปยังโซนที่อยู่ไกลที่สุด
+              </p>
+            </div>
+
+            <div id="grid-tie-inputs" style="display: none">
+              <h3>กำหนดค่าสำหรับ Grid-Tie</h3>
+              <label for="grid-tie-system-size"
+                >ขนาดของระบบที่ต้องการติดตั้ง:</label
+              >
+              <select id="grid-tie-system-size">
+                <option value="0.5">500 W</option>
+                <option value="1">1 kW</option>
+                <option value="1.5">1.5 kW</option>
+                <option value="3">3 kW</option>
+                <option value="5">5 kW</option>
+                <option value="10">10 kW</option>
+              </select>
+              <p class="param-description">
+                เลือกขนาดอินเวอร์เตอร์ที่ต้องการติดตั้ง
+              </p>
+              <label for="electricity-price">ค่าไฟฟ้าต่อหน่วย (บาท/kWh):</label>
+              <input
+                type="number"
+                id="electricity-price"
+                value="4.5"
+                step="0.1"
+              />
+              <p class="param-description">
+                ใส่ค่าไฟตามบิลการไฟฟ้าเพื่อคำนวณการประหยัด
+              </p>
+            </div>
+
+            <div id="load-input-wrapper">
+              <h3>บันทึกโหลดการใช้งาน (Load Input)</h3>
+              <div class="load-form">
+                <label for="device-select">ชื่ออุปกรณ์:</label>
+                <select id="device-select">
+                  <option value="" disabled selected>-- เลือกอุปกรณ์ --</option>
+                  <option value="หลอดไฟ LED">หลอดไฟ LED</option>
+                  <option value="พัดลม">พัดลม</option>
+                  <option value="โทรทัศน์ (TV)">โทรทัศน์ (TV)</option>
+                  <option value="ตู้เย็น">ตู้เย็น</option>
+                  <option value="ชาร์จโทรศัพท์/โน๊ตบุ๊ค">
+                    ชาร์จโทรศัพท์/โน๊ตบุ๊ค
+                  </option>
+                  <option value="เครื่องซักผ้า">เครื่องซักผ้า</option>
+                  <option value="ปั๊มน้ำ">ปั๊มน้ำ</option>
+                  <option value="หม้อหุงข้าว">หม้อหุงข้าว</option>
+                  <option value="เครื่องปรับอากาศ (Air Conditioner)">
+                    เครื่องปรับอากาศ (Air Conditioner)
+                  </option>
+                  <option value="เตารีด">เตารีด</option>
+                  <option value="เครื่องทำน้ำอุ่น">เครื่องทำน้ำอุ่น</option>
+                  <option value="other">อื่นๆ (ระบุเอง)</option>
+                </select>
+
+                <input
+                  type="text"
+                  id="device-name-other"
+                  placeholder="กรุณาระบุชื่ออุปกรณ์"
+                  style="display: none; margin-top: 10px"
+                />
+
+                <label for="device-power">กำลังวัตต์ (W):</label>
+                <input type="number" id="device-power" min="1" />
+
+                <div id="ac-unit-selection" style="display: none">
+                  <label class="radio-label">
+                    <input
+                      type="radio"
+                      id="unit-watts"
+                      name="ac-unit"
+                      value="watts"
+                      checked
+                    />
+                    <span>Watts</span>
+                  </label>
+                  <label class="radio-label">
+                    <input
+                      type="radio"
+                      id="unit-btu"
+                      name="ac-unit"
+                      value="btu"
+                    />
+                    <span>BTU</span>
+                  </label>
+                </div>
+
+                <label for="device-quantity"
+                  >จำนวน เครื่องใช้ไฟฟ้า (เครื่อง):</label
+                >
+                <input type="number" id="device-quantity" min="1" />
+
+                <label>ระยะเวลาใช้งาน (ชั่วโมง / นาที ต่อวัน):</label>
+                <div class="time-inputs">
+                  <select id="device-hours"></select>
+                  <span>ชั่วโมง</span>
+                  <select id="device-minutes"></select>
+                  <span>นาที</span>
+                </div>
+
+                <button id="add-load-btn">เพิ่มโหลด</button>
+              </div>
+
+              <table id="load-summary-table">
+                <thead>
+                  <tr>
+                    <th>ชื่ออุปกรณ์</th>
+                    <th>กำลังวัตต์ (W)</th>
+                    <th>จำนวน</th>
+                    <th>ชั่วโมง/วัน</th>
+                    <th>พลังงานรวม (Wh/วัน)</th>
+                    <th>ลบ</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="4">
+                      <strong>พลังงานรวมทั้งหมดที่ใช้ต่อวัน:</strong>
+                    </td>
+                    <td id="total-daily-energy">0 Wh/วัน</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td colspan="4">
+                      <strong>โหลดสูงสุดที่ใช้พร้อมกัน (W):</strong>
+                    </td>
+                    <td id="max-instantaneous-load">0 W</td>
+                    <td></td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+
+            <div id="additional-params-off-grid">
+              <h3>ตัวแปรเสริมสำหรับ Off-Grid / Hybrid</h3>
+              <label for="autonomy-days">จำนวนวันสำรองไฟ:</label>
+              <input type="number" id="autonomy-days" value="2" min="1" />
+              <p class="param-description">
+                จำนวนวันที่ระบบสามารถจ่ายไฟได้โดยไม่มีแดด
+              </p>
+              <label for="battery-voltage">แรงดันระบบแบตเตอรี่ (V):</label>
+              <select id="battery-voltage">
+                <option value="12">12V</option>
+                <option value="24">24V</option>
+                <option value="48" selected>48V</option>
+              </select>
+              <p class="param-description">
+                แรงดันของระบบแบตเตอรี่ที่ต้องการใช้งาน
+              </p>
+              <label for="dod">Depth of Discharge (DoD) (%):</label>
+              <input type="number" id="dod" value="80" min="1" max="100" />
+              <p class="param-description">
+                ความลึกในการคายประจุ (Lead-Acid ~50%, LiFePO4 ~80%)
+              </p>
+            </div>
+
+            <div id="common-params">
+              <h3>ตัวแปรเสริมของระบบ</h3>
+              <label for="panel-isc"
+                >เลือกขนาดแผง (เพื่อหาค่า Isc โดยประมาณ):</label
+              >
+              <select id="panel-isc">
+                <option value="" disabled selected>
+                  -- เลือกขนาดวัตต์ของแผง --
+                </option>
+                <option value="9.2">350W (Isc ~9.2A)</option>
+                <option value="10.2">400W (Isc ~10.2A)</option>
+                <option value="11.2">450W (Isc ~11.2A)</option>
+                <option value="13.0">500W (Isc ~13.0A)</option>
+                <option value="14.0">550W (Isc ~14.0A)</option>
+                <option value="15.0">600W (Isc ~15.0A)</option>
+              </select>
+              <p class="param-description">
+                ค่ากระแสลัดวงจร (Isc) ใช้คำนวณอุปกรณ์ป้องกัน
+              </p>
+              <label for="inverter-efficiency">ประสิทธิภาพ Inverter (%):</label>
+              <input
+                type="number"
+                id="inverter-efficiency"
+                value="95"
+                min="50"
+                max="100"
+              />
+              <p class="param-description">
+                การสูญเสียพลังงานเมื่อแปลงไฟ DC เป็น AC (ปกติ 90-95%)
+              </p>
+              <label for="system-loss-factor">System Loss Factor (%):</label>
+              <input
+                type="number"
+                id="system-loss-factor"
+                value="85"
+                min="50"
+                max="100"
+              />
+              <p class="param-description">
+                การสูญเสียรวมในระบบ เช่น ความร้อน, ความสกปรก (ปกติ 75-85%)
+              </p>
+              <label for="peak-sun-hours">ชั่วโมงแดดต่อวัน (PSH):</label>
+              <input
+                type="number"
+                id="peak-sun-hours"
+                value="4.5"
+                step="0.1"
+                min="1"
+                max="8"
+              />
+              <p class="param-description">
+                ค่าเฉลี่ยชั่วโมงแดดจัดในพื้นที่ (ประเทศไทย ~4.5 ชม.)
+              </p>
+            </div>
+
+            <button id="calculate-btn">คำนวณระบบ</button>
+            <div class="ad-box medium">
+              <a
+                href="https://www.sponsor-website-2.com"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img src="images/ads/300x250.png" alt="โฆษณาสี่เหลี่ยม" />
+              </a>
+            </div>
+          </div>
+
+          <div class="result-section">
+            <h3>ผลลัพธ์การออกแบบระบบ</h3>
+            <div class="results-wrapper">
+              <div id="diagram-wrapper" class="system-diagram-container">
+                <h4>ภาพวงจร</h4>
+                <div id="diagram-overlay">
+                  <img id="system-diagram" src="" alt="System Diagram" />
+                </div>
+              </div>
+              <div class="ad-box medium">
+                <a
+                  href="https://www.sponsor-website-3.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <img src="images/ads/300x250.png" alt="โฆษณาสี่เหลี่ยม" />
+                </a>
+              </div>
+              <div id="calculation-details">
+                <h4>ขั้นตอนการคำนวณ</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="footer-image-container">
+        <img src="images/profile/profile2.jpg" alt="รูปผู้พัฒนา" />
+      </div>
+      <div class="footer-content">
+        <p>
+          <a href="credits.html" class="credits-link">ทีมงานผู้พัฒนา</a>
+        </p>
+        <p>พบปัญหาการใช้งาน ติดต่อ นายเทอดศิลป์ โสมูล (อาร์ท)</p>
+        <p>
+          e-mail : toedsin.so@dsd.go.th ?
+          <a
+            href="https://www.facebook.com/DSD.Sakonnakhon"
+            target="_blank"
+            rel="noopener noreferrer"
+            >แจ้งได้ที่นี่</a
+          >
+        </p>
+        <p>&copy; 2025 SolarCell Designer by SAKON-DSD</p>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>บทที่ 2: เรื่องของแผงโซลาร์เซลล์ - คลังความรู้โซลาร์เซลล์</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <img src="images/logo.png" alt="Logo" class="header-logo" />
+      <div class="header-text">
+        <h1>Sakonnakhon DSD SolarCell Designer</h1>
+        <p>เครื่องมือช่วยออกแบบระบบพลังงานทดแทนเบื้องต้น</p>
+        <p class="author">โดย สำนักงานพัฒนาฝีมือแรงงานสกลนคร</p>
+      </div>
+    </header>
+
+    <main>
+      <div class="knowledge-content-container">
+        <div class="knowledge-article">
+          <h2>บทที่ 2: ทุกเรื่องต้องรู้เกี่ยวกับ "แผงโซลาร์เซลล์"</h2>
+          <p class="intro">
+            แผงโซลาร์เซลล์คือหัวใจหลักในการผลิตไฟฟ้าจากแสงอาทิตย์
+            การเลือกชนิดและเข้าใจคุณสมบัติของแผงได้อย่างถูกต้อง
+            เป็นก้าวแรกที่สำคัญที่สุดในการออกแบบระบบที่มีประสิทธิภาพ
+          </p>
+
+          <hr />
+
+          <h3>2.1 ชนิดของแผงโซลาร์เซลล์: Mono vs Poly</h3>
+          <p>
+            แผงโซลาร์เซลล์ที่นิยมใช้กันทั่วไปในปัจจุบันมี 2 ชนิดหลัก
+            ซึ่งมีข้อดีและข้อเสียแตกต่างกัน:
+          </p>
+          <img
+            src="images/content/ch2-img1.png"
+            alt="ภาพเปรียบเทียบแผงโซลาร์เซลล์ชนิด Mono และ Poly"
+            class="article-image"
+          />
+
+          <h4>โมโนคริสตัลไลน์ (Monocrystalline)</h4>
+          <ul>
+            <li>
+              <strong>ลักษณะ:</strong> ตัวเซลล์เป็นสี่เหลี่ยมตัดมุม
+              มีสีเข้มสม่ำเสมอ (สีดำหรือน้ำเงินเข้ม)
+            </li>
+            <li>
+              <strong>การผลิต:</strong>
+              ทำจากซิลิคอนบริสุทธิ์สูงที่เป็นผลึกเดี่ยว ทำให้มีประสิทธิภาพสูง
+            </li>
+            <li>
+              <strong>ข้อดี:</strong> ประสิทธิภาพสูงสุด (19-22%),
+              ทำงานได้ดีกว่าในสภาวะแสงน้อย, มีอายุการใช้งานยาวนาน
+            </li>
+            <li><strong>ข้อเสีย:</strong> ราคาสูงกว่า</li>
+            <li>
+              <strong>เหมาะกับ:</strong>
+              พื้นที่ติดตั้งจำกัดที่ต้องการกำลังผลิตสูง เช่น หลังคาบ้าน
+            </li>
+          </ul>
+
+          <h4>โพลีคริสตัลไลน์ (Polycrystalline)</h4>
+          <ul>
+            <li>
+              <strong>ลักษณะ:</strong> ตัวเซลล์เป็นสี่เหลี่ยมจัตุรัส
+              สีน้ำเงินไม่สม่ำเสมอ เห็นลายผลึก
+            </li>
+            <li>
+              <strong>การผลิต:</strong> ทำจากซิลิคอนที่หลอมและเทลงในแบบพิมพ์
+              ทำให้กระบวนการผลิตง่ายกว่า
+            </li>
+            <li><strong>ข้อดี:</strong> ราคาถูกกว่า</li>
+            <li>
+              <strong>ข้อเสีย:</strong> ประสิทธิภาพต่ำกว่า (16-18%),
+              ทนความร้อนได้ไม่ดีเท่า Mono
+            </li>
+            <li>
+              <strong>เหมาะกับ:</strong>
+              พื้นที่ติดตั้งขนาดใหญ่ที่ไม่จำกัดงบประมาณ เช่น โซลาร์ฟาร์ม
+            </li>
+          </ul>
+          <img
+            src="images/content/ch2-img2.png"
+            alt="แผงโซลาร์เซลล์ชนิดโมโนบนหลังคาบ้าน"
+            class="article-image small"
+          />
+
+          <hr />
+
+          <h3>2.2 วิธีการอ่านสเปกชีตแผง (Datasheet)</h3>
+          <p>
+            ที่ด้านหลังของทุกแผงโซลาร์เซลล์จะมีสติกเกอร์ที่ระบุค่าทางไฟฟ้าที่สำคัญ
+            ซึ่งเราต้องใช้ในการออกแบบระบบ:
+          </p>
+          <img
+            src="images/content/ch2-img3.png"
+            alt="ตัวอย่างสเปกชีตหรือเนมเพลทของแผงโซลาร์เซลล์"
+            class="article-image"
+          />
+
+          <ul>
+            <li>
+              <strong>Pmax (Maximum Power):</strong>
+              กำลังไฟฟ้าสูงสุดที่แผงผลิตได้ในสภาวะทดสอบมาตรฐาน มีหน่วยเป็นวัตต์
+              (W) เช่น 550W
+            </li>
+            <li>
+              <strong>Voc (Open Circuit Voltage):</strong> คือ "แรงดันสูงสุด"
+              ที่แผงจะผลิตได้เมื่อไม่มีการต่อใช้งาน (วงจรเปิด) มีหน่วยเป็นโวลต์
+              (V)
+              <strong
+                >ใช้ในการคำนวณว่าสามารถนำแผงมาต่ออนุกรมกันได้สูงสุดกี่แผง</strong
+              >
+              โดยไม่เกินกว่าที่อุปกรณ์ (เช่น ชาร์จเจอร์, อินเวอร์เตอร์) จะรับได้
+            </li>
+            <li>
+              <strong>Isc (Short Circuit Current):</strong> คือ "กระแสสูงสุด"
+              ที่แผงจะผลิตได้เมื่อเกิดการลัดวงจร มีหน่วยเป็นแอมป์ (A)
+              <strong
+                >ใช้ในการคำนวณขนาดของอุปกรณ์ป้องกัน เช่น ฟิวส์
+                และเบรกเกอร์</strong
+              >
+            </li>
+            <li>
+              <strong>Vmp (Maximum Power Voltage):</strong>
+              คือแรงดันที่จุดที่แผงให้กำลังไฟฟ้าสูงสุด
+            </li>
+            <li>
+              <strong>Imp (Maximum Power Current):</strong>
+              คือกระแสที่จุดที่แผงให้กำลังไฟฟ้าสูงสุด
+            </li>
+          </ul>
+
+          <hr />
+
+          <h3>2.3 หลักการต่อวงจรแผง: อนุกรม และ ขนาน</h3>
+          <p>
+            เพื่อเพิ่มกำลังการผลิต เราต้องนำแผงโซลาร์หลายๆ แผงมาต่อรวมกัน
+            ซึ่งทำได้ 2 วิธีหลัก:
+          </p>
+          <img
+            src="images/content/ch2-img4.png"
+            alt="แผนภาพการต่อแผงแบบอนุกรม"
+            class="article-image"
+          />
+          <h4>การต่ออนุกรม (Series Connection)</h4>
+          <p>
+            คือการนำขั้วบวก (+) ของแผงหนึ่ง ไปต่อกับขั้วลบ (-) ของแผงถัดไป
+            เหมือนการต่อถ่านไฟฉาย
+          </p>
+          <ul>
+            <li>
+              <strong>ผลลัพธ์:</strong>
+              <strong>แรงดัน (V) เพิ่มขึ้น</strong> ตามจำนวนแผง แต่กระแส (A)
+              จะเท่าเดิม
+            </li>
+            <li>
+              <strong>ตัวอย่าง:</strong> นำแผง 48V/10A จำนวน 3 แผงมาต่ออนุกรมกัน
+              จะได้ระบบที่มีแรงดันรวม 48+48+48 = 144V และมีกระแส 10A
+            </li>
+          </ul>
+
+          <img
+            src="images/content/ch2-img5.png"
+            alt="แผนภาพการต่อแผงแบบขนาน"
+            class="article-image"
+          />
+          <h4>การต่อขนาน (Parallel Connection)</h4>
+          <p>
+            คือการนำขั้วบวก (+) ของทุกแผงมารวมกัน และนำขั้วลบ (-)
+            ของทุกแผงมารวมกัน
+          </p>
+          <ul>
+            <li>
+              <strong>ผลลัพธ์:</strong>
+              <strong>กระแส (A) เพิ่มขึ้น</strong> ตามจำนวนแผง แต่แรงดัน (V)
+              จะเท่าเดิม
+            </li>
+            <li>
+              <strong>ตัวอย่าง:</strong> นำแผง 48V/10A จำนวน 3 แผงมาต่อขนานกัน
+              จะได้ระบบที่มีแรงดันรวม 48V และมีกระแส 10+10+10 = 30A
+            </li>
+          </ul>
+        </div>
+        <div class="back-link">
+          <a href="knowledge.html"> &larr; กลับสู่สารบัญความรู้ </a>
+          <a href="index.html"> &larr; กลับสู่หน้าหลัก </a>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <div class="footer-image-container">
+        <img src="images/profile/profile2.jpg" alt="รูปผู้พัฒนา" />
+      </div>
+      <div class="footer-content">
+        <p>
+          <a href="credits.html" class="credits-link">ทีมงานผู้พัฒนา</a>
+        </p>
+        <p>พบปัญหาการใช้งาน ติดต่อ นายเทอดศิลป์ โสมูล (อาร์ท)</p>
+        <p>
+          e-mail : toedsin.so@dsd.go.th ?
+          <a
+            href="https://www.facebook.com/DSD.Sakonnakhon"
+            target="_blank"
+            rel="noopener noreferrer"
+            >แจ้งได้ที่นี่</a
+          >
+        </p>
+        <p>&copy; 2025 SolarCell Designer by SAKON-DSD</p>
+      </div>
+    </footer>
+  </body>
+</html>

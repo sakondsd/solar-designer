@@ -1,0 +1,1026 @@
+:root {
+  /* Color Palette */
+  --almost-black: #252b48;
+  --dark-cyan: #2e8a99;
+  --bright-cyan: #84a7a1;
+  --sand: #dac0a3;
+  --off-white: #f7efe5;
+
+  /* General Styling Colors */
+  --background-color: var(--off-white);
+  --text-color: #333;
+  --header-footer-bg: var(--almost-black);
+  --header-footer-text: var(--off-white);
+  --heading-color: var(--dark-cyan);
+  --card-background: white;
+  --section-background: #fdfbf8;
+  --border-color: #e0d9d1;
+
+  /* Buttons & Accents */
+  --accent-color: var(--dark-cyan);
+  --button-hover-color: var(--bright-cyan);
+  --highlight-color: var(--dark-cyan);
+}
+
+/* =================================
+   General Body & Typography Styles
+   ================================= */
+body {
+  font-family: "Sarabun", Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  line-height: 1.6;
+}
+
+main {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 30px auto;
+  background-color: var(--card-background);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.08);
+  border-radius: 10px;
+}
+
+h1,
+h2,
+h3 {
+  color: var(--heading-color);
+}
+
+/* =================================
+   Header & Footer Styles
+   ================================= */
+header {
+  background-color: var(--header-footer-bg);
+  color: var(--header-footer-text);
+  padding: 2em;
+  display: flex;
+  flex-direction: column; /* สั่งให้เรียงเป็นแนวตั้งเสมอ */
+  align-items: center; /* สั่งให้ทุกอย่างอยู่ตรงกลางเสมอ */
+  gap: 1em;
+  text-align: center;
+}
+
+.header-logo {
+  height: 80px;
+  width: auto;
+}
+
+.header-text {
+  /* No special rules needed here anymore */
+}
+
+header h1 {
+  color: white;
+  font-size: 1.8em; /* ขนาดเริ่มต้นสำหรับมือถือ */
+  margin: 0;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+header p {
+  font-size: 1em;
+  margin: 0.2em 0 0 0;
+}
+
+header .author {
+  color: var(--sand);
+  font-size: 0.9em;
+  margin-top: 0.5em;
+}
+
+/* --- START: ส่วนสำคัญสำหรับหน้าจอคอมพิวเตอร์ --- */
+@media (min-width: 769px) {
+  /* ขยายขนาดตัวอักษรและโลโก้บนจอใหญ่ */
+  .header-logo {
+    height: 100px;
+  }
+
+  header h1 {
+    font-size: 2.5em;
+  }
+
+  header p {
+    font-size: 1.1em;
+  }
+
+  header .author {
+    font-size: 1em;
+  }
+}
+/* --- END: ส่วนสำคัญสำหรับหน้าจอคอมพิวเตอร์ --- */
+
+footer {
+  background-color: var(--header-footer-bg);
+  color: var(--header-footer-text);
+  padding: 2em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.5em;
+}
+
+.footer-image-container {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid var(--sand);
+  flex-shrink: 0;
+  order: 1;
+}
+
+.footer-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.footer-content {
+  order: 2;
+}
+
+footer p {
+  margin: 0.3em 0;
+}
+
+footer a {
+  color: var(--sand);
+  text-decoration: underline;
+}
+
+footer a:hover {
+  color: var(--bright-cyan);
+}
+
+/* =================================
+   Main Content & Card Styles
+   ================================= */
+#system-selection {
+  text-align: center;
+}
+
+.system-options {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 30px;
+  flex-wrap: wrap;
+}
+
+.system-card {
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 20px;
+  width: 300px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  cursor: pointer;
+  background-color: var(--section-background);
+}
+
+.system-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+.system-card img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  background-color: white;
+  padding: 5px;
+  border: 1px solid var(--border-color);
+}
+
+.system-card button {
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background-color 0.2s;
+  font-weight: bold;
+}
+
+.system-card button:hover {
+  background-color: var(--button-hover-color);
+  color: var(--almost-black);
+}
+
+#design-area {
+  margin-top: 30px;
+}
+
+#design-area #back-to-selection {
+  background-color: var(--sand);
+  color: var(--almost-black);
+  border: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+#design-area #back-to-selection:hover {
+  background-color: #c9a278;
+}
+
+.design-content {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.load-input-section,
+.result-section {
+  flex: 1;
+  min-width: 400px;
+  background-color: var(--section-background);
+  padding: 25px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+/* =================================
+   Form & Input Styles
+   ================================= */
+.load-form label,
+#common-params label,
+#additional-params-off-grid label,
+#grid-tie-inputs label,
+#water-system-inputs label {
+  display: block;
+  margin-bottom: 5px;
+  margin-top: 15px;
+  font-weight: bold;
+  color: var(--almost-black);
+}
+
+.load-form input,
+.load-form select,
+#additional-params-off-grid input,
+#additional-params-off-grid select,
+#common-params input,
+#common-params select,
+#grid-tie-inputs input,
+#grid-tie-inputs select,
+#water-system-inputs input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+  box-sizing: border-box;
+}
+
+.param-description {
+  font-size: 0.85em;
+  color: #555;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  padding-left: 2px;
+}
+
+.load-form button,
+#calculate-btn {
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  padding: 12px 22px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1.05em;
+  font-weight: bold;
+  transition: background-color 0.2s;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.load-form button:hover,
+#calculate-btn:hover {
+  background-color: var(--button-hover-color);
+  color: var(--almost-black);
+}
+
+#ac-unit-selection {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: normal;
+}
+
+.time-inputs {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.time-inputs select {
+  flex: 1;
+}
+
+.time-inputs span {
+  white-space: nowrap;
+}
+
+#load-summary-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+#load-summary-table th,
+#load-summary-table td {
+  border: 1px solid var(--border-color);
+  padding: 10px;
+  text-align: left;
+}
+
+#load-summary-table th {
+  background-color: #e9e4de;
+  color: var(--almost-black);
+  font-weight: bold;
+}
+
+#load-summary-table td button {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+#load-summary-table td button:hover {
+  background-color: #c82333;
+}
+
+#total-daily-energy,
+#max-instantaneous-load {
+  font-weight: bold;
+  font-size: 1.1em;
+  color: var(--highlight-color);
+}
+
+/* =================================
+   Results & Diagram Styles
+   ================================= */
+.results-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  margin-top: 15px;
+}
+
+.results-wrapper > #calculation-details,
+.results-wrapper > .system-diagram-container {
+  flex: 1;
+  min-width: 350px;
+}
+
+.result-section h4 {
+  color: var(--almost-black);
+  border-bottom: 2px solid var(--sand);
+  padding-bottom: 5px;
+  margin-bottom: 15px;
+}
+
+#calculation-details h5 {
+  font-size: 1.1em;
+  color: var(--dark-cyan);
+  margin-top: 20px;
+  margin-bottom: 10px;
+  padding-bottom: 3px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+#calculation-details div {
+  margin-bottom: 10px;
+  padding: 12px;
+  background-color: #e9e4de;
+  border-left: 4px solid var(--sand);
+  border-radius: 5px;
+  font-size: 0.95em;
+}
+
+#calculation-details div strong {
+  color: var(--almost-black);
+  font-size: 1.05em;
+}
+
+.savings-summary {
+  background-color: var(--dark-cyan) !important;
+  color: white;
+  border-left: 4px solid var(--almost-black) !important;
+}
+.savings-summary strong,
+.savings-summary .formula,
+.savings-summary .calculation {
+  color: white !important;
+}
+
+.calculation {
+  color: #556b2f;
+  font-style: italic;
+}
+
+.system-diagram-container {
+  position: relative;
+  text-align: center;
+}
+
+#system-diagram {
+  max-width: 100%;
+  height: auto;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: white;
+}
+
+#diagram-overlay {
+  position: relative;
+  display: inline-block;
+}
+
+/* =================================
+   Overlay Text Styles
+   ================================= */
+.overlay-text {
+  position: absolute;
+  background-color: rgba(247, 239, 229, 0.9);
+  border: 2px solid var(--bright-cyan);
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-weight: bold;
+  color: var(--almost-black);
+  white-space: pre;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transform: translateX(-50%);
+  font-size: 0.6em; /* Base font size for overlays on desktop */
+}
+
+/* --- Positions for Off-Grid Diagram --- */
+.overlay-text.solar-panels {
+  top: 15%;
+  left: 26.3%;
+}
+.overlay-text.charge-controller {
+  top: 32%;
+  left: 35%;
+}
+.overlay-text.battery {
+  top: 82%;
+  left: 46%;
+}
+.overlay-text.inverter {
+  top: 73%;
+  left: 74%;
+}
+.overlay-text.ac-load {
+  top: 64%;
+  left: 85%;
+}
+.overlay-text.dc-load {
+  top: 80%;
+  left: 23%;
+}
+.overlay-text.og-pv-fuse {
+  top: 68%;
+  left: 8%;
+}
+.overlay-text.og-dc-surge {
+  top: 32%;
+  left: 15%;
+}
+.overlay-text.og-pv-breaker {
+  top: 32%;
+  left: 25%;
+}
+.overlay-text.og-ctrl-batt-breaker {
+  top: 32%;
+  left: 46%;
+}
+.overlay-text.og-batt-inv-breaker {
+  top: 32%;
+  left: 55%;
+}
+.overlay-text.og-ac-surge {
+  top: 10%;
+  left: 75%;
+}
+.overlay-text.og-ac-breaker {
+  top: 10%;
+  left: 86%;
+}
+.overlay-text.og-ac-fuse {
+  top: 10%;
+  left: 65%;
+}
+
+/* --- Positions for Grid-Tie Diagram --- */
+.overlay-text.gridtie-inverter {
+  top: 81%;
+  left: 47%;
+}
+.overlay-text.gt-pv-fuse {
+  top: 77%;
+  left: 8%;
+}
+.overlay-text.gt-dc-surge {
+  top: 80%;
+  left: 25%;
+}
+.overlay-text.gt-dc-breaker {
+  top: 36%;
+  left: 28%;
+}
+
+/* --- Positions for Hybrid Diagram --- */
+.overlay-text.hy-solar {
+  top: 18%;
+  left: 20%;
+}
+.overlay-text.hy-inverter {
+  top: 40%;
+  left: 50%;
+}
+.overlay-text.hy-battery {
+  top: 80%;
+  left: 50%;
+}
+.overlay-text.hy-meter {
+  top: 25%;
+  left: 78%;
+}
+.overlay-text.hy-dc-breaker {
+  top: 55%;
+  left: 28%;
+}
+.overlay-text.hy-batt-breaker {
+  top: 65%;
+  left: 38%;
+}
+.overlay-text.hy-ac-breaker {
+  top: 55%;
+  left: 78%;
+}
+.overlay-text.hy-pv-fuse {
+  top: 45%;
+  left: 15%;
+}
+.overlay-text.hy-dc-surge {
+  top: 58%;
+  left: 15%;
+}
+.overlay-text.hy-ac-fuse {
+  top: 45%;
+  left: 68%;
+}
+.overlay-text.hy-ac-surge {
+  top: 58%;
+  left: 68%;
+}
+
+/* --- Positions for Water System Diagram --- */
+.overlay-text.ws-solar {
+  top: 20%;
+  left: 18%;
+}
+.overlay-text.ws-pump {
+  top: 70%;
+  left: 42%;
+}
+.overlay-text.ws-main-pipe {
+  top: 50%;
+  left: 65%;
+}
+.overlay-text.ws-submain-pipe {
+  top: 60%;
+  left: 80%;
+}
+.overlay-text.ws-sprinkler-pipe {
+  top: 40%;
+  left: 88%;
+}
+
+/* =================================
+   Ad Box Styles
+   ================================= */
+.ad-container {
+  margin-top: 40px;
+  padding: 0 20px;
+}
+
+.ad-box {
+  border: 2px dashed var(--border-color);
+  background-color: white;
+  padding: 10px;
+  text-align: center;
+  border-radius: 8px;
+  margin-top: 30px;
+  box-sizing: border-box;
+}
+
+.ad-box img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.ad-box.wide {
+  max-width: 728px;
+  min-height: 90px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.ad-box.medium {
+  max-width: 300px;
+  min-height: 250px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* =================================
+   Credits Page Styles
+   ================================= */
+.credits-container {
+  padding: 2em;
+  text-align: center;
+}
+
+.credits-intro {
+  max-width: 700px;
+  margin: 0 auto 2em auto;
+  font-size: 1.1em;
+  color: #555;
+}
+
+.credits-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.credit-card {
+  background-color: var(--section-background);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1.5em;
+  width: 250px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.credit-card h3 {
+  margin-top: 0;
+  color: var(--dark-cyan);
+}
+
+.credit-card p {
+  margin: 0.2em 0;
+}
+
+.back-link {
+  margin-top: 3em;
+  /* START: New styles for centering and responsiveness */
+  display: flex;
+  justify-content: center;
+  gap: 15px; /* ระยะห่างระหว่างปุ่ม */
+  flex-wrap: wrap; /* ทำให้ปุ่มเรียงซ้อนกันบนจอแคบ */
+  /* END: New styles */
+}
+
+.back-link a,
+.credits-link {
+  color: var(--dark-cyan);
+  text-decoration: none;
+  font-weight: bold;
+  border: 2px solid var(--sand);
+  padding: 10px 20px;
+  border-radius: 5px;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.back-link a:hover,
+.credits-link:hover {
+  background-color: var(--sand);
+  color: var(--almost-black);
+}
+
+footer .credits-link {
+  border: none;
+  padding: 0;
+  color: var(--sand);
+  text-decoration: underline;
+}
+
+footer .credits-link:hover {
+  background-color: transparent;
+  color: var(--bright-cyan);
+}
+
+/* =================================
+   Responsive Styles (Media Queries)
+   ================================= */
+
+/* --- For Tablets and smaller desktops --- */
+@media (max-width: 900px) {
+  .design-content {
+    flex-direction: column;
+  }
+  .load-input-section,
+  .result-section {
+    min-width: unset;
+    width: auto;
+  }
+}
+
+/* --- For Mobile phones --- */
+@media (max-width: 768px) {
+  /* Header adjustments for smaller screens */
+  header {
+    flex-direction: row;
+    justify-content: center;
+    text-align: left;
+  }
+
+  .header-text {
+    order: 1;
+    text-align: center;
+  }
+
+  .header-image-container {
+    order: 2;
+    width: 100px;
+    height: 100px;
+  }
+
+  header h1 {
+    font-size: 1.8em;
+  }
+
+  /* Footer adjustments for smaller screens */
+  footer {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+}
+
+@media (max-width: 600px) {
+  .system-options {
+    flex-direction: column;
+    align-items: center;
+  }
+  .system-card {
+    width: 90%;
+  }
+  main {
+    margin: 15px;
+    padding: 15px;
+  }
+
+  /* Header adjustments for very small screens */
+  header {
+    flex-direction: column;
+    text-align: center;
+  }
+  .header-text {
+    text-align: center;
+    margin-bottom: 1.5em;
+  }
+
+  /* Responsive Overlays for Mobile */
+  .overlay-text {
+    font-size: 0.5em;
+    padding: 2px 3px;
+    border-width: 1px;
+  }
+
+  /* Mobile-specific position adjustments */
+  .overlay-text.charge-controller {
+    top: 35%;
+    left: 35%;
+  }
+  .overlay-text.battery {
+    top: 82%;
+    left: 48%;
+  }
+  .overlay-text.inverter {
+    top: 73%;
+    left: 78%;
+  }
+  .overlay-text.gridtie-inverter {
+    top: 82%;
+    left: 47%;
+  }
+  .overlay-text.gt-dc-breaker {
+    top: 40%;
+    left: 28%;
+  }
+  .overlay-text.gt-dc-surge {
+    top: 60%;
+    left: 18%;
+  }
+  .overlay-text.gt-pv-fuse {
+    top: 77%;
+    left: 12%;
+  }
+  .overlay-text.hy-solar {
+    top: 15%;
+    left: 20%;
+  }
+  .overlay-text.hy-inverter {
+    top: 40%;
+    left: 50%;
+  }
+  .overlay-text.hy-battery {
+    top: 80%;
+    left: 50%;
+  }
+  .overlay-text.hy-dc-breaker {
+    top: 55%;
+    left: 25%;
+  }
+  .overlay-text.hy-batt-breaker {
+    top: 65%;
+    left: 38%;
+  }
+  .overlay-text.hy-ac-breaker {
+    top: 55%;
+    left: 80%;
+  }
+  .overlay-text.ws-solar {
+    top: 20%;
+    left: 18%;
+  }
+  .overlay-text.ws-pump {
+    top: 70%;
+    left: 40%;
+  }
+  .overlay-text.ws-main-pipe {
+    top: 50%;
+    left: 60%;
+  }
+  .overlay-text.ws-submain-pipe {
+    top: 60%;
+    left: 75%;
+  }
+  .overlay-text.ws-sprinkler-pipe {
+    top: 40%;
+    left: 85%;
+  }
+}
+/* --- Style for Linkable System Card --- */
+.system-card-link {
+  text-decoration: none; /* ลบเส้นใต้ของลิงก์ */
+}
+/* --- START: Knowledge Hub Page Styles (Updated for Images) --- */
+.knowledge-hub {
+  text-align: center;
+}
+
+.knowledge-options {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 30px;
+  flex-wrap: wrap;
+}
+
+.knowledge-card {
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 25px;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  background-color: var(--section-background);
+}
+
+.knowledge-card .knowledge-icon {
+  width: 80px; /* กำหนดความกว้างของพื้นที่ไอคอน */
+  height: 80px; /* กำหนดความสูงของพื้นที่ไอคอน */
+  margin-bottom: 1em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.knowledge-card .knowledge-icon img {
+  max-width: 100%; /* ทำให้รูปภาพขนาดพอดีกับพื้นที่ที่กำหนด */
+  max-height: 100%;
+}
+
+.knowledge-card h3 {
+  color: var(--dark-cyan);
+  margin-top: 0;
+  flex-grow: 1;
+}
+
+.knowledge-card p {
+  color: #555;
+  font-size: 0.9em;
+  min-height: 80px;
+}
+
+.knowledge-card button {
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background-color 0.2s;
+  font-weight: bold;
+  margin-top: auto;
+}
+
+.knowledge-card button:hover {
+  background-color: var(--button-hover-color);
+  color: var(--almost-black);
+}
+
+.accordion-header {
+  width: 100%;
+}
+
+.accordion-content {
+  padding: 0 1.5em;
+  background-color: white;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+  text-align: left;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.accordion-content h4 {
+  margin-top: 1.5em;
+  color: var(--almost-black);
+  border-bottom: 1px solid var(--sand);
+  padding-bottom: 0.5em;
+}
+/* --- END: Knowledge Hub Page Styles --- */
+.read-lesson-btn {
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  padding: 10px 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background-color 0.2s;
+  font-weight: bold;
+  margin-top: auto; /* จัดให้ปุ่มอยู่ด้านล่างสุดของการ์ด */
+  text-decoration: none; /* ลบเส้นใต้ของลิงก์ */
+  display: inline-block;
+  width: 60%; /* กำหนดความกว้างของปุ่ม */
+}
+
+.read-lesson-btn:hover {
+  background-color: var(--button-hover-color);
+  color: var(--almost-black);
+}
+/* --- START: Knowledge Article Image Styles --- */
+.knowledge-article .article-image {
+  max-width: 35%;
+  max-height: 35%;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  margin: 1.5em auto;
+  display: block;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.knowledge-article .article-image.small {
+  max-width: 300px;
+}
+/* --- END: Knowledge Article Image Styles --- */
