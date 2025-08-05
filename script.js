@@ -38,6 +38,9 @@ document.addEventListener("DOMContentLoaded", () => {
   );
   const autonomyDaysInput = document.getElementById("autonomy-days");
   const batteryVoltageSelect = document.getElementById("battery-voltage");
+  const voltageRecommendationP = document.getElementById(
+    "voltage-recommendation"
+  ); // <-- เพิ่ม Element ใหม่
   const dodInput = document.getElementById("dod");
   const commonParamsDiv = document.getElementById("common-params");
   const panelIscInput = document.getElementById("panel-isc");
@@ -138,6 +141,25 @@ document.addEventListener("DOMContentLoaded", () => {
       total += load.totalWh;
     });
     totalDailyEnergyDisplay.textContent = `${total.toFixed(2)} Wh/วัน`;
+    // START: เพิ่มตรรกะการแนะนำแรงดันระบบ
+    // START: เพิ่มตรรกะการแนะนำแรงดันระบบ
+    if (total > 0) {
+      let recommendedVoltage = "48V";
+      if (total < 3000) {
+        recommendedVoltage = "12V";
+      } else if (total <= 6000) {
+        recommendedVoltage = "24V";
+      }
+      voltageRecommendationP.textContent = `💡 จากปริมาณการใช้ไฟ แนะนำให้ใช้ระบบ ${recommendedVoltage}`;
+
+      // (Optional) ตั้งค่า Dropdown ให้อัตโนมัติ
+      if (recommendedVoltage === "12V") batteryVoltageSelect.value = "12";
+      else if (recommendedVoltage === "24V") batteryVoltageSelect.value = "24";
+      else batteryVoltageSelect.value = "48";
+    } else {
+      voltageRecommendationP.textContent = ""; // ล้างข้อความถ้าไม่มีโหลด
+    }
+    // END: เพิ่มตรรกะ
     return total;
   }
 

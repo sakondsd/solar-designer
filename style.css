@@ -1024,3 +1024,8 @@ footer .credits-link:hover {
   max-width: 300px;
 }
 /* --- END: Knowledge Article Image Styles --- */
+
+.recommendation {
+  font-weight: bold;
+  color: var(--dark-cyan);
+}
