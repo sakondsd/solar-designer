@@ -215,14 +215,24 @@
                 >
                 <input type="number" id="device-quantity" min="1" />
 
-                <label>ระยะเวลาใช้งาน (ชั่วโมง / นาที ต่อวัน):</label>
-                <div class="time-inputs">
-                  <select id="device-hours"></select>
-                  <span>ชั่วโมง</span>
-                  <select id="device-minutes"></select>
-                  <span>นาที</span>
+                <div class="time-input-group">
+                  <label>ใช้งานกลางวัน (07:00-17:00):</label>
+                  <div class="time-inputs">
+                    <select id="day-hours"></select>
+                    <span>ชั่วโมง</span>
+                    <select id="day-minutes"></select>
+                    <span>นาที</span>
+                  </div>
                 </div>
-
+                <div class="time-input-group">
+                  <label>ใช้งานกลางคืน (18:00-06:00):</label>
+                  <div class="time-inputs">
+                    <select id="night-hours"></select>
+                    <span>ชั่วโมง</span>
+                    <select id="night-minutes"></select>
+                    <span>นาที</span>
+                  </div>
+                </div>
                 <button id="add-load-btn">เพิ่มโหลด</button>
               </div>
 
@@ -232,7 +242,8 @@
                     <th>ชื่ออุปกรณ์</th>
                     <th>กำลังวัตต์ (W)</th>
                     <th>จำนวน</th>
-                    <th>ชั่วโมง/วัน</th>
+                    <th>ชม./วัน (กลางวัน)</th>
+                    <th>ชม./วัน (กลางคืน)</th>
                     <th>พลังงานรวม (Wh/วัน)</th>
                     <th>ลบ</th>
                   </tr>
