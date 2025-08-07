@@ -271,6 +271,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const inverterEfficiency = parseFloat(inverterEfficiencyInput.value) / 100;
     const systemLossFactor = parseFloat(systemLossFactorInput.value) / 100;
     const peakSunHours = parseFloat(peakSunHoursInput.value);
+
     addSubheading("1. ขนาดระบบหลัก (System Sizing)");
     addCalculationStep(
       "สรุปการใช้พลังงาน",
@@ -280,17 +281,25 @@ document.addEventListener("DOMContentLoaded", () => {
         2
       )} Wh | กลางคืน: ${nighttimeEnergy.toFixed(2)} Wh`
     );
+
+    const batteryChargingEfficiency = 0.85;
+    const daytimeEnergy = totalDailyLoadEnergyWh - nighttimeEnergy;
+    const requiredEnergyForCharging =
+      nighttimeEnergy / batteryChargingEfficiency;
+    const totalEnergyNeeded = daytimeEnergy + requiredEnergyForCharging;
     const pvEnergyRequiredWh =
-      totalDailyLoadEnergyWh / inverterEfficiency / systemLossFactor;
+      totalEnergyNeeded / inverterEfficiency / systemLossFactor;
+
     addCalculationStep(
       "1.1 พลังงานที่ต้องการจากแผง",
-      `(พลังงานรวม / Eff. Inv) / Loss`,
-      `(${totalDailyLoadEnergyWh.toFixed(
+      `((พลังงานกลางวัน) + (พลังงานกลางคืน / Eff. ชาร์จ)) / Eff. Inv / Loss`,
+      `((${daytimeEnergy.toFixed(2)}) + (${nighttimeEnergy.toFixed(
         2
-      )} / ${inverterEfficiency}) / ${systemLossFactor}`,
+      )} / ${batteryChargingEfficiency})) / ${inverterEfficiency} / ${systemLossFactor}`,
       pvEnergyRequiredWh.toFixed(2),
       "Wh/วัน"
     );
+
     const theoreticalWp = pvEnergyRequiredWh / peakSunHours;
     addCalculationStep(
       "1.2 ขนาดแผง (ตามทฤษฎี)",
@@ -298,6 +307,7 @@ document.addEventListener("DOMContentLoaded", () => {
       `${pvEnergyRequiredWh.toFixed(2)}Wh / ${peakSunHours}h`,
       `${theoreticalWp.toFixed(2)} Wp`
     );
+
     const theoreticalNumPanels = Math.ceil(
       theoreticalWp / selectedPanelWattage
     );
@@ -307,6 +317,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const numStrings = Math.ceil(theoreticalNumPanels / maxPanelsInSeries);
     const actualNumPanels = numStrings * maxPanelsInSeries;
     const actualWp = actualNumPanels * selectedPanelWattage;
+
     addCalculationStep(
       "1.3 การต่อแผง",
       `คำนวณจาก Wp ทฤษฎีและการจัดวาง`,
@@ -319,6 +330,7 @@ document.addEventListener("DOMContentLoaded", () => {
       `${actualNumPanels} × ${selectedPanelWattage}W`,
       `${actualWp.toFixed(0)} Wp`
     );
+
     let maxInstantaneousLoadW = 0;
     loads.forEach((load) => {
       maxInstantaneousLoadW += load.power * load.quantity;
@@ -331,14 +343,12 @@ document.addEventListener("DOMContentLoaded", () => {
       `${maxInstantaneousLoadW.toFixed(2)}W × 1.25`,
       `${inverterSizeW.toFixed(2)} W (แนะนำ ${recommendedInverterkW}kW)`
     );
-    // --- Battery --- //
+
     const energyFromBatteryWh =
       (nighttimeEnergy * autonomyDays) / inverterEfficiency;
     const batteryCapacityAh = energyFromBatteryWh / (batteryVoltage * dod);
     const recommendedBatteryAh = 100;
     const numBatteries = Math.ceil(batteryCapacityAh / recommendedBatteryAh);
-
-    // --- START: Updated Calculation Step with Description ---
     const description = `คำอธิบาย: ${batteryCapacityAh.toFixed(
       0
     )}Ah คือขนาดความจุขั้นต่ำที่คำนวณได้ เพื่อการใช้งานจริงและยืดอายุแบตเตอรี่ ควรเผื่อขนาดเพิ่มอีกประมาณ 20-30%`;
@@ -353,7 +363,7 @@ document.addEventListener("DOMContentLoaded", () => {
       )} Ah (แนะนำ ${numBatteries} ลูก ${recommendedBatteryAh}Ah ${batteryVoltage}V)`,
       description
     );
-    // --- END: Updated Calculation Step with Description ---
+
     addSubheading("2. อุปกรณ์ป้องกันฝั่ง DC");
     const requiredFuseCurrent = isc * 1.56;
     const recommendedFuse = roundUpToStandard(
@@ -407,6 +417,7 @@ document.addEventListener("DOMContentLoaded", () => {
         2
       )} A (แนะนำ ${recommendedBatteryBreaker}A - เบรกเกอร์หลักป้องกันแบตเตอรี่)`
     );
+
     addSubheading("3. อุปกรณ์ป้องกันฝั่ง AC");
     const maxACCurrent = ((recommendedInverterkW * 1000) / 230) * 1.25;
     const recommendedACBreaker = roundUpToStandard(
@@ -441,6 +452,7 @@ document.addEventListener("DOMContentLoaded", () => {
       ``,
       `แนะนำ ${recommendedACCable} (สายไฟสำหรับโหลด AC)`
     );
+
     addOverlayText(
       `${selectedPanelWattage}W x ${actualNumPanels} แผง\n(รวม ${actualWp.toFixed(
         0
@@ -471,7 +483,157 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function calculateGridTie() {
-    // Function content remains the same
+    clearCalculationDetails();
+    const systemSizekW = parseFloat(gridTieSystemSizeSelect.value);
+    const pricePerUnit = parseFloat(electricityPriceInput.value);
+    const isc = parseFloat(panelIscInput.value);
+    if (isNaN(isc) || isc <= 0) {
+      alert("กรุณาเลือกขนาดแผงโซลาร์เซลล์ (เพื่อหาค่า Isc)");
+      return;
+    }
+    if (isNaN(pricePerUnit) || pricePerUnit <= 0) {
+      alert("กรุณากรอกค่าไฟฟ้าต่อหน่วยให้ถูกต้อง");
+      return;
+    }
+    const selectedOption = panelIscInput.options[panelIscInput.selectedIndex];
+    const selectedPanelWattage = parseInt(selectedOption.text);
+    const systemLossFactor = parseFloat(systemLossFactorInput.value) / 100;
+    const peakSunHours = parseFloat(peakSunHoursInput.value);
+    addSubheading("1. ผลการประหยัดพลังงาน");
+    const energyPerDay = systemSizekW * peakSunHours * systemLossFactor;
+    addCalculationStep(
+      "1.1 พลังงานที่ผลิตได้ต่อวัน",
+      `ขนาดระบบ(kW) × PSH × Loss`,
+      `${systemSizekW}kW × ${peakSunHours} × ${systemLossFactor}`,
+      energyPerDay.toFixed(2),
+      "kWh/วัน"
+    );
+    const energyPerMonth = energyPerDay * 30;
+    const savingsPerMonth = energyPerMonth * pricePerUnit;
+    addCalculationStep(
+      "1.2 ประหยัดค่าไฟต่อเดือน",
+      `พลังงานต่อเดือน × ค่าไฟ`,
+      `${energyPerMonth.toFixed(2)}kWh × ${pricePerUnit} บาท`,
+      `${savingsPerMonth.toFixed(2)} บาท/เดือน`,
+      "",
+      true
+    );
+    const savingsPerYear = savingsPerMonth * 12;
+    addCalculationStep(
+      "1.3 ประหยัดค่าไฟต่อปี",
+      `ประหยัดต่อเดือน × 12`,
+      `${savingsPerMonth.toFixed(2)} × 12`,
+      `${savingsPerYear.toFixed(2)} บาท/ปี`,
+      "",
+      true
+    );
+    addSubheading("2. อุปกรณ์สำหรับระบบขนาด " + systemSizekW + " kW");
+    const recommendedInverterkW = systemSizekW;
+    addCalculationStep(
+      "2.1 ขนาด Grid-Tie Inverter",
+      `เลือกตามขนาดระบบ`,
+      ``,
+      `แนะนำ ${recommendedInverterkW}kW`
+    );
+    const actualNumPanels = Math.ceil(
+      (recommendedInverterkW * 1000) / selectedPanelWattage
+    );
+    const actualWp = actualNumPanels * selectedPanelWattage;
+    const panelVoc = 48;
+    const inverterMaxVoltage = 550;
+    const maxPanelsInSeries = Math.floor(inverterMaxVoltage / panelVoc);
+    const numStrings = Math.ceil(actualNumPanels / maxPanelsInSeries);
+    addCalculationStep(
+      "2.2 ขนาดแผงโซลาร์",
+      `(ขนาด Inverter / Wแผง)`,
+      `(${recommendedInverterkW * 1000}W / ${selectedPanelWattage}W)`,
+      `${actualWp.toFixed(0)} Wp (ใช้จริง ${actualNumPanels} แผง)`
+    );
+    let stringDescription = `ต่ออนุกรม ${actualNumPanels} แผง, จำนวน 1 สตริง`;
+    if (numStrings > 1) {
+      stringDescription = `ต่ออนุกรมสตริงละ ${maxPanelsInSeries} แผง, จำนวน ${numStrings} สตริง (อาจต้องปรับจำนวนแผงให้ลงตัว)`;
+    }
+    if (actualNumPanels <= maxPanelsInSeries) {
+      stringDescription = `ต่ออนุกรม ${actualNumPanels} แผง, จำนวน 1 สตริง`;
+    }
+    addCalculationStep(
+      "2.3 การต่อแผง",
+      `(อ้างอิง Inverter ${inverterMaxVoltage}V)`,
+      ``,
+      stringDescription
+    );
+    addSubheading("3. อุปกรณ์ป้องกันฝั่ง DC");
+    const requiredFuseCurrent = isc * 1.56;
+    const recommendedFuse = roundUpToStandard(
+      requiredFuseCurrent,
+      [10, 15, 20, 25, 30]
+    );
+    addCalculationStep(
+      "3.1 PV String Fuse",
+      `Isc × 1.56`,
+      `${isc.toFixed(2)}A × 1.56`,
+      `แนะนำ ${recommendedFuse}A (ป้องกันกระแสเกินในสายแผง)`
+    );
+    const pvCableAmpacity = isc * 1.56;
+    const recommendedPVCable = getPVCableSize(pvCableAmpacity);
+    addCalculationStep(
+      "3.2 ขนาดสาย PV1-F",
+      `ทนกระแส > ${pvCableAmpacity.toFixed(2)} A`,
+      ``,
+      `แนะนำ ${recommendedPVCable} (สายไฟทนแดดฝนสำหรับแผง)`
+    );
+    addCalculationStep(
+      "3.3 DC Surge (PV)",
+      "เลือกตามแรงดันระบบ",
+      ``,
+      `แนะนำ 1000Vdc (ป้องกันฟ้าผ่า/ไฟกระชากฝั่งแผง)`
+    );
+    const maxTotalCurrent = isc * numStrings * 1.25;
+    const recommendedDCBreaker = roundUpToStandard(
+      maxTotalCurrent,
+      [16, 20, 25, 32, 40, 50, 63]
+    );
+    addCalculationStep(
+      "3.4 DC Breaker (PV to Inverter)",
+      `(Isc × จำนวนสตริง) × 1.25`,
+      `(${isc.toFixed(2)}A × ${numStrings}) × 1.25`,
+      `แนะนำ ${recommendedDCBreaker}A (เบรกเกอร์หลักฝั่งแผง)`
+    );
+    addSubheading("4. อุปกรณ์ป้องกันฝั่ง AC");
+    const maxACCurrent = ((recommendedInverterkW * 1000) / 230) * 1.25;
+    const recommendedACBreaker = roundUpToStandard(
+      maxACCurrent,
+      [10, 16, 20, 25, 32, 50]
+    );
+    addCalculationStep(
+      "4.1 AC Breaker (Output)",
+      `(P_inv / 230V) × 1.25`,
+      `(${recommendedInverterkW * 1000}W / 230V) × 1.25`,
+      `แนะนำ ${recommendedACBreaker}A (เบรกเกอร์เชื่อมต่อระบบไฟ)`
+    );
+    const recommendedACCable = getACCableSize(recommendedACBreaker);
+    addCalculationStep(
+      "4.2 ขนาดสาย AC",
+      `เลือกตามขนาดเบรกเกอร์`,
+      ``,
+      `แนะนำ ${recommendedACCable} (สายไฟเชื่อมต่อระบบ)`
+    );
+    addCalculationStep(
+      "4.3 AC Surge (Output)",
+      "เลือกตามแรงดันไฟบ้าน",
+      ``,
+      "แนะนำ 275Vac (ป้องกันไฟกระชากฝั่ง AC)"
+    );
+    addOverlayText(
+      `${selectedPanelWattage}W x ${actualNumPanels} แผง\n(รวม ${actualWp.toFixed(
+        0
+      )} Wp)`,
+      "solar-panels"
+    );
+    addOverlayText(`${recommendedInverterkW} kW\nGrid-Tie`, "gridtie-inverter");
+    addOverlayText(`${recommendedFuse}A\nFuse DC`, "gt-pv-fuse");
+    addOverlayText(`1000Vdc\nDC Surge`, "gt-dc-surge");
+    addOverlayText(`${recommendedDCBreaker}A\nDC Breaker`, "gt-dc-breaker");
   }
 
   function calculateHybrid() {
@@ -504,14 +666,19 @@ document.addEventListener("DOMContentLoaded", () => {
         2
       )} Wh | กลางคืน: ${nighttimeEnergy.toFixed(2)} Wh`
     );
+    const batteryChargingEfficiency = 0.85;
+    const daytimeEnergy = totalDailyLoadEnergyWh - nighttimeEnergy;
+    const requiredEnergyForCharging =
+      nighttimeEnergy / batteryChargingEfficiency;
+    const totalEnergyNeeded = daytimeEnergy + requiredEnergyForCharging;
     const pvEnergyRequiredWh =
-      totalDailyLoadEnergyWh / inverterEfficiency / systemLossFactor;
+      totalEnergyNeeded / inverterEfficiency / systemLossFactor;
     addCalculationStep(
       "1.1 พลังงานที่ต้องการจากแผง",
-      `(พลังงานรวม / Eff. Inv) / Loss`,
-      `(${totalDailyLoadEnergyWh.toFixed(
+      `((พลังงานกลางวัน) + (พลังงานกลางคืน / Eff. ชาร์จ)) / Eff. Inv / Loss`,
+      `((${daytimeEnergy.toFixed(2)}) + (${nighttimeEnergy.toFixed(
         2
-      )} / ${inverterEfficiency}) / ${systemLossFactor}`,
+      )} / ${batteryChargingEfficiency})) / ${inverterEfficiency} / ${systemLossFactor}`,
       pvEnergyRequiredWh.toFixed(2),
       "Wh/วัน"
     );
@@ -563,6 +730,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const batteryCapacityAh = energyFromBatteryWh / (batteryVoltage * dod);
     const recommendedBatteryAh = 100;
     const numBatteries = Math.ceil(batteryCapacityAh / recommendedBatteryAh);
+    const description = `คำอธิบาย: ${batteryCapacityAh.toFixed(
+      0
+    )}Ah คือขนาดความจุขั้นต่ำที่คำนวณได้ เพื่อการใช้งานจริงและยืดอายุแบตเตอรี่ ควรเผื่อขนาดเพิ่มอีกประมาณ 20-30%`;
     addCalculationStep(
       "1.6 ขนาดแบตเตอรี่",
       `(พลังงานกลางคืน × วันสำรอง) / (V × DoD × Eff. Inv)`,
@@ -571,7 +741,8 @@ document.addEventListener("DOMContentLoaded", () => {
       )} × ${autonomyDays}) / (${batteryVoltage} × ${dod} × ${inverterEfficiency})`,
       `${batteryCapacityAh.toFixed(
         2
-      )} Ah (แนะนำ ${numBatteries} ลูก ${recommendedBatteryAh}Ah ${batteryVoltage}V)`
+      )} Ah (แนะนำ ${numBatteries} ลูก ${recommendedBatteryAh}Ah ${batteryVoltage}V)`,
+      description
     );
     addSubheading("2. อุปกรณ์ป้องกัน");
     const requiredFuseCurrent = isc * 1.56;
@@ -640,7 +811,111 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function calculateWaterSystem() {
-    // Function content remains the same
+    clearCalculationDetails();
+    const sprinklerFlowRate = parseFloat(sprinklerFlowRateInput.value);
+    const sprinklersPerZone = parseFloat(sprinklersPerZoneInput.value);
+    const sprinklerPressure = parseFloat(sprinklerPressureInput.value);
+    const staticHead = parseFloat(staticHeadInput.value);
+    const pipeLength = parseFloat(pipeLengthInput.value);
+    if (
+      isNaN(sprinklerFlowRate) ||
+      isNaN(sprinklersPerZone) ||
+      isNaN(sprinklerPressure) ||
+      isNaN(staticHead) ||
+      isNaN(pipeLength)
+    ) {
+      alert("กรุณากรอกข้อมูลระบบน้ำให้ครบถ้วนและถูกต้อง");
+      return;
+    }
+    addSubheading("1. สรุปความต้องการของระบบ (System Requirements)");
+    const totalFlowRateLPH = sprinklerFlowRate * sprinklersPerZone;
+    const totalFlowRateM3H = totalFlowRateLPH / 1000;
+    addCalculationStep(
+      "1.1 อัตราการไหลของน้ำ (Q) ต่อ 1 โซน",
+      "อัตราจ่ายน้ำ × จำนวนสปริงเกอร์",
+      `${sprinklerFlowRate} L/h × ${sprinklersPerZone}`,
+      `${totalFlowRateLPH.toFixed(2)} L/h หรือ ${totalFlowRateM3H.toFixed(
+        2
+      )} m³/h`,
+      `คำอธิบาย: ปั๊มต้องสามารถจ่ายน้ำได้อย่างน้อย ${totalFlowRateLPH.toFixed(
+        0
+      )} ลิตร/ชั่วโมง เพื่อให้สปริงเกอร์ ${sprinklersPerZone} ตัวทำงานพร้อมกันได้`
+    );
+    const pressureHead = sprinklerPressure * 10.2;
+    const frictionLoss = (pipeLength / 10) * 1.5;
+    const totalHead = staticHead + pressureHead + frictionLoss;
+    addCalculationStep(
+      "1.2 แรงดันรวม (Total Head)",
+      "ความสูง + แรงดันใช้งาน + แรงดันสูญเสีย",
+      `${staticHead}m + ${pressureHead.toFixed(2)}m + ${frictionLoss.toFixed(
+        2
+      )}m`,
+      `${totalHead.toFixed(2)} เมตร`
+    );
+    addSubheading("2. อุปกรณ์ที่แนะนำ (Recommended Equipment)");
+    const pumpHP = getPumpSizeHP(totalFlowRateM3H, totalHead);
+    addCalculationStep(
+      "2.1 ขนาดปั๊มน้ำ",
+      "คำนวณจาก Q และ H",
+      "",
+      `แนะนำขนาดประมาณ ${pumpHP}`,
+      `คำอธิบาย: ปั๊มต้องสามารถจ่ายน้ำได้อย่างน้อย ${totalFlowRateM3H.toFixed(
+        2
+      )} m³/h ที่แรงดัน ${totalHead.toFixed(2)} เมตร`
+    );
+    const mainPipeSize = getPipeSize(totalFlowRateM3H);
+    const subMainFlowM3H = totalFlowRateM3H / 2;
+    const subMainPipeSize = getPipeSize(subMainFlowM3H);
+    const sprinklerPipeFlowM3H = (sprinklerFlowRate * 2) / 1000;
+    const sprinklerPipeSize = getPipeSize(sprinklerPipeFlowM3H);
+    addCalculationStep(
+      "2.2 ขนาดท่อเมน",
+      "คำนวณจากอัตราการไหลรวม",
+      "",
+      `แนะนำขนาด ${mainPipeSize}`,
+      `คำอธิบาย: สำหรับอัตราการไหลรวม ${totalFlowRateM3H.toFixed(2)} m³/h`
+    );
+    addCalculationStep(
+      "2.3 ขนาดท่อเมนย่อย",
+      "คำนวณจากอัตราการไหลในโซนย่อย",
+      "",
+      `แนะนำขนาด ${subMainPipeSize}`,
+      `คำอธิบาย: สำหรับอัตราการไหลประมาณ ${subMainFlowM3H.toFixed(2)} m³/h`
+    );
+    addCalculationStep(
+      "2.4 ขนาดท่อย่อย",
+      "คำนวณจากอัตราการไหลของสปริงเกอร์",
+      "",
+      `แนะนำขนาด ${sprinklerPipeSize}`,
+      `คำอธิบาย: สำหรับอัตราการไหลประมาณ ${sprinklerPipeFlowM3H.toFixed(
+        2
+      )} m³/h`
+    );
+    const pumpWatts = getPumpPowerWatts(pumpHP);
+    const requiredPVWp = pumpWatts * 1.3;
+    const selectedOption = panelIscInput.options[panelIscInput.selectedIndex];
+    const selectedPanelWattage =
+      selectedOption && selectedOption.value
+        ? parseInt(selectedOption.text)
+        : 400;
+    const numPanels = Math.ceil(requiredPVWp / selectedPanelWattage);
+    addSubheading("3. ระบบโซลาร์เซลล์สำหรับปั๊ม (Solar Power System)");
+    addCalculationStep(
+      "3.1 ขนาดแผงโซลาร์",
+      "กำลังปั๊ม (W) × 1.3",
+      `${pumpWatts.toFixed(0)}W × 1.3`,
+      `แนะนำขนาดรวม ${requiredPVWp.toFixed(
+        0
+      )} Wp (ใช้ ${selectedPanelWattage}W ประมาณ ${numPanels} แผง)`
+    );
+    addOverlayText(
+      `${requiredPVWp.toFixed(0)} Wp\n(${numPanels} แผง)`,
+      "ws-solar"
+    );
+    addOverlayText(`${pumpHP}\nPump`, "ws-pump");
+    addOverlayText(`${mainPipeSize}\nMain Pipe`, "ws-main-pipe");
+    addOverlayText(`${subMainPipeSize}\nSub-Main`, "ws-submain-pipe");
+    addOverlayText(`${sprinklerPipeSize}\nSprinkler Pipe`, "ws-sprinkler-pipe");
   }
 
   // ---- Event Listeners ----
@@ -738,13 +1013,9 @@ document.addEventListener("DOMContentLoaded", () => {
         : deviceSelect.value;
     let power = parseFloat(devicePowerInput.value);
     const quantity = parseInt(deviceQuantityInput.value);
-
-    const dayHours =
-      parseInt(dayHoursSelect.value, 10) +
-      parseInt(dayMinutesSelect.value, 10) / 60;
-    const nightHours =
-      parseInt(nightHoursSelect.value, 10) +
-      parseInt(nightMinutesSelect.value, 10) / 60;
+    const selectedHours = parseInt(deviceHoursSelect.value, 10);
+    const selectedMinutes = parseInt(deviceMinutesSelect.value, 10);
+    const totalHours = selectedHours + selectedMinutes / 60;
 
     if (
       name === "เครื่องปรับอากาศ (Air Conditioner)" &&
@@ -760,21 +1031,16 @@ document.addEventListener("DOMContentLoaded", () => {
       power > 0 &&
       !isNaN(quantity) &&
       quantity > 0 &&
-      (dayHours > 0 || nightHours > 0)
+      !isNaN(totalHours) &&
+      totalHours > 0
     ) {
-      const daytimeWh = power * quantity * dayHours;
-      const nighttimeWh = power * quantity * nightHours;
-      const totalWh = daytimeWh + nighttimeWh;
-
+      const totalWh = power * quantity * totalHours;
       loads.push({
         name,
         power: parseFloat(power.toFixed(2)),
         quantity,
-        daytimeHours: parseFloat(dayHours.toFixed(4)),
-        nighttimeHours: parseFloat(nightHours.toFixed(4)),
+        hours: parseFloat(totalHours.toFixed(4)),
         totalWh,
-        daytimeWh,
-        nighttimeWh,
       });
       renderLoadsTable();
       updateOverallTotalEnergy();
@@ -787,10 +1053,8 @@ document.addEventListener("DOMContentLoaded", () => {
       if (timeUnitDiv) timeUnitDiv.style.display = "none";
       devicePowerInput.value = "";
       deviceQuantityInput.value = "";
-      dayHoursSelect.value = "0";
-      dayMinutesSelect.value = "0";
-      nightHoursSelect.value = "0";
-      nightMinutesSelect.value = "0";
+      deviceHoursSelect.value = "0";
+      deviceMinutesSelect.value = "0";
     } else {
       alert("กรุณากรอกข้อมูลโหลดให้ครบถ้วนและถูกต้อง (รวมถึงระยะเวลาใช้งาน)");
     }
