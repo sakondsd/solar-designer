@@ -163,9 +163,9 @@ document.addEventListener("DOMContentLoaded", () => {
         (currentSystem === "off-grid" || currentSystem === "hybrid")
       ) {
         let recommendedVoltage = "48V";
-        if (total < 3000) {
+        if (total < 1000) {
           recommendedVoltage = "12V";
-        } else if (total <= 6000) {
+        } else if (total <= 4000) {
           recommendedVoltage = "24V";
         }
         voltageRecommendationP.textContent = `💡 จากปริมาณการใช้ไฟ แนะนำให้ใช้ระบบ ${recommendedVoltage}`;
@@ -282,15 +282,10 @@ document.addEventListener("DOMContentLoaded", () => {
       )} Wh | กลางคืน: ${nighttimeEnergy.toFixed(2)} Wh`
     );
 
-    const batteryChargingEfficiency = 0.85;
-    const daytimeEnergy = totalDailyLoadEnergyWh - nighttimeEnergy;
-    const requiredEnergyForCharging =
-      nighttimeEnergy / batteryChargingEfficiency;
-    const totalEnergyNeeded = daytimeEnergy + requiredEnergyForCharging;
-    const chargingFactor = 1.2; // เผื่อพลังงานสำหรับชาร์จแบตเตอรี่ 20%
+    const chargingFactor = 1.2;
     const pvEnergyRequiredWh =
-      totalEnergyNeeded / inverterEfficiency / systemLossFactor;
-
+      (totalDailyLoadEnergyWh * chargingFactor) /
+      (inverterEfficiency * systemLossFactor);
     addCalculationStep(
       "1.1 พลังงานที่ต้องการจากแผง",
       `(พลังงานรวม × Charging Factor) / (Eff. Inv × System Loss)`,
@@ -345,17 +340,13 @@ document.addEventListener("DOMContentLoaded", () => {
       `${inverterSizeW.toFixed(2)} W (แนะนำ ${recommendedInverterkW}kW)`
     );
 
-    // ... (ส่วนคำนวณขนาดแผงตามทฤษฎีและติดตั้งจริงจะใช้ pvEnergyRequiredWh ค่าใหม่นี้) ...
-
     const energyNeededForBackup = totalDailyLoadEnergyWh * autonomyDays;
     const batteryCapacityAh = energyNeededForBackup / (batteryVoltage * dod);
     const recommendedBatteryAh = 100;
     const numBatteries = Math.ceil(batteryCapacityAh / recommendedBatteryAh);
-
     const description = `คำอธิบาย: ${batteryCapacityAh.toFixed(
       0
     )}Ah คือขนาดความจุขั้นต่ำที่คำนวณได้ เพื่อการใช้งานจริงและยืดอายุแบตเตอรี่ ควรเผื่อขนาดเพิ่มอีกประมาณ 20-30%`;
-
     addCalculationStep(
       "1.6 ขนาดแบตเตอรี่",
       `(พลังงานรวม × วันสำรอง) / (V × DoD)`,
@@ -367,7 +358,6 @@ document.addEventListener("DOMContentLoaded", () => {
       )} Ah (แนะนำ ${numBatteries} ลูก ${recommendedBatteryAh}Ah ${batteryVoltage}V)`,
       description
     );
-    // --- END: Corrected Sizing Logic ---
 
     addSubheading("2. อุปกรณ์ป้องกันฝั่ง DC");
     const requiredFuseCurrent = isc * 1.56;
@@ -730,17 +720,13 @@ document.addEventListener("DOMContentLoaded", () => {
       `${maxInstantaneousLoadW.toFixed(2)}W × 1.25`,
       `${inverterSizeW.toFixed(2)} W (แนะนำ ${recommendedInverterkW}kW)`
     );
-    // ... (ส่วนคำนวณขนาดแผงตามทฤษฎีและติดตั้งจริงจะใช้ pvEnergyRequiredWh ค่าใหม่นี้) ...
-
     const energyNeededForBackup = totalDailyLoadEnergyWh * autonomyDays;
     const batteryCapacityAh = energyNeededForBackup / (batteryVoltage * dod);
     const recommendedBatteryAh = 100;
     const numBatteries = Math.ceil(batteryCapacityAh / recommendedBatteryAh);
-
     const description = `คำอธิบาย: ${batteryCapacityAh.toFixed(
       0
     )}Ah คือขนาดความจุขั้นต่ำที่คำนวณได้ เพื่อการใช้งานจริงและยืดอายุแบตเตอรี่ ควรเผื่อขนาดเพิ่มอีกประมาณ 20-30%`;
-
     addCalculationStep(
       "1.6 ขนาดแบตเตอรี่",
       `(พลังงานรวม × วันสำรอง) / (V × DoD)`,
@@ -752,7 +738,6 @@ document.addEventListener("DOMContentLoaded", () => {
       )} Ah (แนะนำ ${numBatteries} ลูก ${recommendedBatteryAh}Ah ${batteryVoltage}V)`,
       description
     );
-    // --- END: Corrected Sizing Logic ---
     addSubheading("2. อุปกรณ์ป้องกัน");
     const requiredFuseCurrent = isc * 1.56;
     const recommendedFuse = roundUpToStandard(
