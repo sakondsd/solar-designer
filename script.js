@@ -287,15 +287,16 @@ document.addEventListener("DOMContentLoaded", () => {
     const requiredEnergyForCharging =
       nighttimeEnergy / batteryChargingEfficiency;
     const totalEnergyNeeded = daytimeEnergy + requiredEnergyForCharging;
+    const chargingFactor = 1.2; // เผื่อพลังงานสำหรับชาร์จแบตเตอรี่ 20%
     const pvEnergyRequiredWh =
       totalEnergyNeeded / inverterEfficiency / systemLossFactor;
 
     addCalculationStep(
       "1.1 พลังงานที่ต้องการจากแผง",
-      `((พลังงานกลางวัน) + (พลังงานกลางคืน / Eff. ชาร์จ)) / Eff. Inv / Loss`,
-      `((${daytimeEnergy.toFixed(2)}) + (${nighttimeEnergy.toFixed(
+      `(พลังงานรวม × Charging Factor) / (Eff. Inv × System Loss)`,
+      `(${totalDailyLoadEnergyWh.toFixed(
         2
-      )} / ${batteryChargingEfficiency})) / ${inverterEfficiency} / ${systemLossFactor}`,
+      )}Wh × ${chargingFactor}) / (${inverterEfficiency} × ${systemLossFactor})`,
       pvEnergyRequiredWh.toFixed(2),
       "Wh/วัน"
     );
@@ -344,25 +345,29 @@ document.addEventListener("DOMContentLoaded", () => {
       `${inverterSizeW.toFixed(2)} W (แนะนำ ${recommendedInverterkW}kW)`
     );
 
-    const energyFromBatteryWh =
-      (nighttimeEnergy * autonomyDays) / inverterEfficiency;
-    const batteryCapacityAh = energyFromBatteryWh / (batteryVoltage * dod);
+    // ... (ส่วนคำนวณขนาดแผงตามทฤษฎีและติดตั้งจริงจะใช้ pvEnergyRequiredWh ค่าใหม่นี้) ...
+
+    const energyNeededForBackup = totalDailyLoadEnergyWh * autonomyDays;
+    const batteryCapacityAh = energyNeededForBackup / (batteryVoltage * dod);
     const recommendedBatteryAh = 100;
     const numBatteries = Math.ceil(batteryCapacityAh / recommendedBatteryAh);
+
     const description = `คำอธิบาย: ${batteryCapacityAh.toFixed(
       0
     )}Ah คือขนาดความจุขั้นต่ำที่คำนวณได้ เพื่อการใช้งานจริงและยืดอายุแบตเตอรี่ ควรเผื่อขนาดเพิ่มอีกประมาณ 20-30%`;
+
     addCalculationStep(
       "1.6 ขนาดแบตเตอรี่",
-      `(พลังงานกลางคืน × วันสำรอง) / (V × DoD × Eff. Inv)`,
-      `(${nighttimeEnergy.toFixed(
+      `(พลังงานรวม × วันสำรอง) / (V × DoD)`,
+      `(${totalDailyLoadEnergyWh.toFixed(
         2
-      )} × ${autonomyDays}) / (${batteryVoltage} × ${dod} × ${inverterEfficiency})`,
+      )}Wh × ${autonomyDays}) / (${batteryVoltage}V × ${dod})`,
       `${batteryCapacityAh.toFixed(
         2
       )} Ah (แนะนำ ${numBatteries} ลูก ${recommendedBatteryAh}Ah ${batteryVoltage}V)`,
       description
     );
+    // --- END: Corrected Sizing Logic ---
 
     addSubheading("2. อุปกรณ์ป้องกันฝั่ง DC");
     const requiredFuseCurrent = isc * 1.56;
@@ -725,25 +730,29 @@ document.addEventListener("DOMContentLoaded", () => {
       `${maxInstantaneousLoadW.toFixed(2)}W × 1.25`,
       `${inverterSizeW.toFixed(2)} W (แนะนำ ${recommendedInverterkW}kW)`
     );
-    const energyFromBatteryWh =
-      (nighttimeEnergy * autonomyDays) / inverterEfficiency;
-    const batteryCapacityAh = energyFromBatteryWh / (batteryVoltage * dod);
+    // ... (ส่วนคำนวณขนาดแผงตามทฤษฎีและติดตั้งจริงจะใช้ pvEnergyRequiredWh ค่าใหม่นี้) ...
+
+    const energyNeededForBackup = totalDailyLoadEnergyWh * autonomyDays;
+    const batteryCapacityAh = energyNeededForBackup / (batteryVoltage * dod);
     const recommendedBatteryAh = 100;
     const numBatteries = Math.ceil(batteryCapacityAh / recommendedBatteryAh);
+
     const description = `คำอธิบาย: ${batteryCapacityAh.toFixed(
       0
     )}Ah คือขนาดความจุขั้นต่ำที่คำนวณได้ เพื่อการใช้งานจริงและยืดอายุแบตเตอรี่ ควรเผื่อขนาดเพิ่มอีกประมาณ 20-30%`;
+
     addCalculationStep(
       "1.6 ขนาดแบตเตอรี่",
-      `(พลังงานกลางคืน × วันสำรอง) / (V × DoD × Eff. Inv)`,
-      `(${nighttimeEnergy.toFixed(
+      `(พลังงานรวม × วันสำรอง) / (V × DoD)`,
+      `(${totalDailyLoadEnergyWh.toFixed(
         2
-      )} × ${autonomyDays}) / (${batteryVoltage} × ${dod} × ${inverterEfficiency})`,
+      )}Wh × ${autonomyDays}) / (${batteryVoltage}V × ${dod})`,
       `${batteryCapacityAh.toFixed(
         2
       )} Ah (แนะนำ ${numBatteries} ลูก ${recommendedBatteryAh}Ah ${batteryVoltage}V)`,
       description
     );
+    // --- END: Corrected Sizing Logic ---
     addSubheading("2. อุปกรณ์ป้องกัน");
     const requiredFuseCurrent = isc * 1.56;
     const recommendedFuse = roundUpToStandard(
@@ -993,22 +1002,15 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   deviceSelect.addEventListener("change", () => {
+    const timeUnitSelectionDiv = document.getElementById("time-unit-selection");
     deviceNameOtherInput.style.display =
       deviceSelect.value === "other" ? "block" : "none";
-
-    // Logic for Air Conditioner
-    const acUnitDiv = document.getElementById("ac-unit-selection");
-    if (acUnitDiv) {
-      acUnitDiv.style.display =
-        deviceSelect.value === "เครื่องปรับอากาศ (Air Conditioner)"
-          ? "flex"
-          : "none";
-    }
-
-    // Logic for Water Heater
-    const timeUnitDiv = document.getElementById("time-unit-selection");
-    if (timeUnitDiv) {
-      timeUnitDiv.style.display =
+    acUnitSelectionDiv.style.display =
+      deviceSelect.value === "เครื่องปรับอากาศ (Air Conditioner)"
+        ? "flex"
+        : "none";
+    if (timeUnitSelectionDiv) {
+      timeUnitSelectionDiv.style.display =
         deviceSelect.value === "เครื่องทำน้ำอุ่น" ? "flex" : "none";
     }
   });
@@ -1062,7 +1064,6 @@ document.addEventListener("DOMContentLoaded", () => {
       updateOverallTotalEnergy();
       updateMaxLoad();
 
-      // Clear inputs
       deviceSelect.value = "";
       deviceNameOtherInput.value = "";
       acUnitSelectionDiv.style.display = "none";
