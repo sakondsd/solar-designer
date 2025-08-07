@@ -993,15 +993,22 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   deviceSelect.addEventListener("change", () => {
-    const timeUnitSelectionDiv = document.getElementById("time-unit-selection");
     deviceNameOtherInput.style.display =
       deviceSelect.value === "other" ? "block" : "none";
-    acUnitSelectionDiv.style.display =
-      deviceSelect.value === "เครื่องปรับอากาศ (Air Conditioner)"
-        ? "flex"
-        : "none";
-    if (timeUnitSelectionDiv) {
-      timeUnitSelectionDiv.style.display =
+
+    // Logic for Air Conditioner
+    const acUnitDiv = document.getElementById("ac-unit-selection");
+    if (acUnitDiv) {
+      acUnitDiv.style.display =
+        deviceSelect.value === "เครื่องปรับอากาศ (Air Conditioner)"
+          ? "flex"
+          : "none";
+    }
+
+    // Logic for Water Heater
+    const timeUnitDiv = document.getElementById("time-unit-selection");
+    if (timeUnitDiv) {
+      timeUnitDiv.style.display =
         deviceSelect.value === "เครื่องทำน้ำอุ่น" ? "flex" : "none";
     }
   });
@@ -1013,9 +1020,13 @@ document.addEventListener("DOMContentLoaded", () => {
         : deviceSelect.value;
     let power = parseFloat(devicePowerInput.value);
     const quantity = parseInt(deviceQuantityInput.value);
-    const selectedHours = parseInt(deviceHoursSelect.value, 10);
-    const selectedMinutes = parseInt(deviceMinutesSelect.value, 10);
-    const totalHours = selectedHours + selectedMinutes / 60;
+
+    const dayHours =
+      parseInt(dayHoursSelect.value, 10) +
+      parseInt(dayMinutesSelect.value, 10) / 60;
+    const nightHours =
+      parseInt(nightHoursSelect.value, 10) +
+      parseInt(nightMinutesSelect.value, 10) / 60;
 
     if (
       name === "เครื่องปรับอากาศ (Air Conditioner)" &&
@@ -1031,21 +1042,27 @@ document.addEventListener("DOMContentLoaded", () => {
       power > 0 &&
       !isNaN(quantity) &&
       quantity > 0 &&
-      !isNaN(totalHours) &&
-      totalHours > 0
+      (dayHours > 0 || nightHours > 0)
     ) {
-      const totalWh = power * quantity * totalHours;
+      const daytimeWh = power * quantity * dayHours;
+      const nighttimeWh = power * quantity * nightHours;
+      const totalWh = daytimeWh + nighttimeWh;
+
       loads.push({
         name,
         power: parseFloat(power.toFixed(2)),
         quantity,
-        hours: parseFloat(totalHours.toFixed(4)),
+        daytimeHours: parseFloat(dayHours.toFixed(4)),
+        nighttimeHours: parseFloat(nightHours.toFixed(4)),
         totalWh,
+        daytimeWh,
+        nighttimeWh,
       });
       renderLoadsTable();
       updateOverallTotalEnergy();
       updateMaxLoad();
 
+      // Clear inputs
       deviceSelect.value = "";
       deviceNameOtherInput.value = "";
       acUnitSelectionDiv.style.display = "none";
@@ -1053,8 +1070,10 @@ document.addEventListener("DOMContentLoaded", () => {
       if (timeUnitDiv) timeUnitDiv.style.display = "none";
       devicePowerInput.value = "";
       deviceQuantityInput.value = "";
-      deviceHoursSelect.value = "0";
-      deviceMinutesSelect.value = "0";
+      dayHoursSelect.value = "0";
+      dayMinutesSelect.value = "0";
+      nightHoursSelect.value = "0";
+      nightMinutesSelect.value = "0";
     } else {
       alert("กรุณากรอกข้อมูลโหลดให้ครบถ้วนและถูกต้อง (รวมถึงระยะเวลาใช้งาน)");
     }
